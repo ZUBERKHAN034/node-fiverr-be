@@ -1,8 +1,8 @@
-import { registration, login } from './users';
+import { register, login } from './users';
 
 const paths = {
-  '/services/registration': {
-    post: registration,
+  '/services/register': {
+    post: register,
   },
   '/services/login': {
     post: login,

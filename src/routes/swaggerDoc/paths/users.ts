@@ -4,23 +4,19 @@ const security = [
   },
 ];
 
-const registration = {
+const register = {
   tags: ['Users'],
   description: 'Create User Account',
-  operationId: 'registration',
+  operationId: 'register',
   requestBody: {
     content: {
       'application/x-www-form-urlencoded': {
         schema: {
           type: 'object',
           properties: {
-            firstName: {
+            username: {
               type: 'string',
-              example: 'John',
-            },
-            lastName: {
-              type: 'string',
-              example: 'Dou',
+              example: 'john',
             },
             email: {
               type: 'string',
@@ -29,6 +25,10 @@ const registration = {
             password: {
               type: 'string',
               example: 'sample',
+            },
+            country: {
+              type: 'string',
+              example: 'usa',
             },
           },
         },
@@ -113,4 +113,4 @@ const login = {
   },
 };
 
-export { registration, login, security };
+export { register, login, security };

@@ -1,8 +1,8 @@
-import type { CreateUser, Login } from '../types/request/user';
+import type { UserDetails } from '../types/request/user';
 import { UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
 import { RespError } from '../lib/wr_response';
-import { IUser } from '../db/models/mongoose/user';
+import { IUser } from '../db/models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import utility from '../lib/utility';
@@ -15,22 +15,21 @@ export default class UserService extends Base {
   /**
    * Function for registration of users
    *
-   * @param {CreateUser}
+   * @param {UserDetails}
    * @returns {ServiceReturnVal}
    */
-  public async registration(params: CreateUser): Promise<ServiceReturnVal<string>> {
+  public async register(params: UserDetails): Promise<ServiceReturnVal<string>> {
     const returnVal: ServiceReturnVal<string> = {};
     try {
-      const user = await this.userRepo.userByEmail(params.email);
-      if (utility.isEmpty(user)) {
+      const isUser = await this.userRepo.userByEmail(params.email);
+      if (utility.isEmpty(isUser)) {
         const user = {
-          firstName: params.firstName,
-          lastName: params.lastName,
-          fullName: `${params.firstName} ${params.lastName}`,
+          username: params.username,
           email: params.email,
           password: params.password,
-        };
-        await this.userRepo.create(user as IUser);
+          country: params.country,
+        } as IUser;
+        await this.userRepo.create(user);
         returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_401, constants.ERROR_MESSAGES.USER_ALREADY_EXISTS);
@@ -46,10 +45,10 @@ export default class UserService extends Base {
   /**
    * Function for login with email and password
    *
-   * @param {Login}
+   * @param {UserDetails}
    * @returns {ServiceReturnVal}
    */
-  public async login(params: Login): Promise<ServiceReturnVal<object>> {
+  public async login(params: UserDetails): Promise<ServiceReturnVal<object>> {
     const returnVal: ServiceReturnVal<object> = {};
     try {
       const user = await this.userRepo.findOne({ email: params.email });
@@ -59,12 +58,10 @@ export default class UserService extends Base {
         if (match) {
           const usr = {
             _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            fullName: user.fullName,
+            username: user.username,
             email: user.email,
-            role: user.role,
-          };
+            country: user.country,
+          } as IUser;
           user.password = undefined;
           const token = jwt.sign(usr, process.env.JWT!, { expiresIn: '24h' });
           returnVal.data = { user, token: token };

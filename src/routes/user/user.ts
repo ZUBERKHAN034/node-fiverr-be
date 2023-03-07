@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import UserController from '../../controller/user';
+import UserController from '../../controllers/user';
 
 export default class UserRoute {
   public router: Router;
@@ -11,7 +11,7 @@ export default class UserRoute {
   }
 
   routes() {
-    this.router.post('/services/registration', this.controller.registration.bind(this.controller));
+    this.router.post('/services/register', this.controller.register.bind(this.controller));
     this.router.post('/services/login', this.controller.login.bind(this.controller));
   }
 }

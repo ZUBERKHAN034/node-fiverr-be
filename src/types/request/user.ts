@@ -1,13 +1,12 @@
 import { Query } from 'express-serve-static-core';
 
-export interface CreateUser extends Query {
-  firstName: string;
-  lastName: string;
+export interface UserDetails extends Query {
+  username: string;
   email: string;
   password: string;
-}
-
-export interface Login extends Query {
-  email: string;
-  password: string;
+  country: string;
+  img: string;
+  phone: string;
+  desc: string;
+  isSeller: string;
 }

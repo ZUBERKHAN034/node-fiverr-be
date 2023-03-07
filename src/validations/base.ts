@@ -1,5 +1,4 @@
 import Joi, { AnySchema, ObjectSchema, PartialSchemaMap } from 'joi';
-// import constants from '../common/constants';
 
 export default class Base {
   protected id(isRequired: boolean): AnySchema {
@@ -37,6 +36,13 @@ export default class Base {
   }
   protected isBoolean(isRequired: boolean): AnySchema {
     let schema = Joi.bool();
+    if (isRequired) {
+      schema = schema.required();
+    }
+    return schema;
+  }
+  protected email(isRequired: boolean): AnySchema {
+    let schema = Joi.string().trim().email();
     if (isRequired) {
       schema = schema.required();
     }
