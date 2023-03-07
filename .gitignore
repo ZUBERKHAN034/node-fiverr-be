@@ -1,0 +1,8 @@
+node_modules/
+/local/
+/dist/
+/build/
+*.DS_Store
+docker-logs/
+logs/
+*.rdb
