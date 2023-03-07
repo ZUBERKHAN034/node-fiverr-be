@@ -25,7 +25,7 @@ export class RespError extends Error {
     return new RespError(code, message);
   }
 
-  public static unauthoriedAction(message: string = constants.ERROR_MESSAGES.NOT_AUTHORISED): Error {
+  public static unauthoriedAction(message: string = constants.ERROR_MESSAGES.NOT_AUTHORIZED): Error {
     return new RespError(constants.RESP_ERR_CODES.ERR_422, message);
   }
 }
