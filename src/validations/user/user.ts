@@ -8,6 +8,10 @@ export default class User extends Base {
       email: this.email(true),
       password: this.isString(true),
       country: this.isString(true),
+      img: this.isString(false),
+      desc: this.isString(false),
+      phone: this.isString(false),
+      isSeller: this.isBoolean(false),
     };
 
     return Joi.object(schema);
@@ -15,8 +19,14 @@ export default class User extends Base {
 
   public getLoginVS(): ObjectSchema {
     const schema: PartialSchemaMap = {
-      email: this.email(true),
+      username: this.isString(true),
       password: this.isString(true),
+    };
+    return Joi.object(schema);
+  }
+  public getDeleteVS(): ObjectSchema {
+    const schema: PartialSchemaMap = {
+      id: this.id(true),
     };
     return Joi.object(schema);
   }

@@ -9,6 +9,7 @@ if (['local', 'nodemon-local'].includes(process.env.NODE_ENV?.trim())) {
 import express from 'express';
 import compression from 'compression';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import router from './routes';
 import { expressjwt } from 'express-jwt';
 import { DBManager } from './db/db_manager';
@@ -16,12 +17,12 @@ import { DBManager } from './db/db_manager';
 export class ApiServer {
   public app: express.Application;
   private PORT;
-  private corsOptions = () => cors({ origin: '*', credentials: true });
+  private corsOptions = () => cors({ origin: process.env.FE_BASE_URL, credentials: true });
 
   // private resp = new TPCResponse();
 
   constructor() {
-    this.PORT = process.env.PORT || 8080;
+    this.PORT = process.env.PORT || 8002;
     this.app = express();
     this.configureJWT();
     this.config();
@@ -38,6 +39,7 @@ export class ApiServer {
   public config() {
     this.app.use('/services/webhook', express.raw({ type: '*/*' }));
     this.app.use(express.json());
+    this.app.use(cookieParser());
     this.app.use(compression());
     this.app.use(this.corsOptions());
     this.app.use(express.json({ limit: '30mb' }));
@@ -52,6 +54,7 @@ export class ApiServer {
         secret: process.env.JWT!,
         algorithms: ['HS256'],
         requestProperty: 'currentUser',
+        getToken: (req) => req.headers.cookie?.split('accessToken=')[1] || null,
       }).unless({ path: publicRoutes })
     );
   }

@@ -33,16 +33,6 @@ const constants = {
       FACEBOOK: 'FACEBOOK',
       CUSTOM: 'CUSTOM',
     },
-    MIME_TYPE: {
-      IMAGE: {
-        SVG: 'image/svg+xml',
-        PNG: 'image/png',
-      },
-    },
-    ACL_TYPE: {
-      PUBLIC: 'public-read',
-      PRIVATE: 'private',
-    },
     HASH_EXPIRES_IN: {
       DEFAULT_EXPIRY: 10,
       INVITE_EXPIRY: 1440,
@@ -64,6 +54,9 @@ const constants = {
       SUBSCRIPTION: 'subscription',
       PURCHASE: 'purchase',
     },
+    TOKENS: {
+      ACCESS_TOKEN: 'accessToken',
+    },
   },
 
   RESP_ERR_CODES: {
@@ -81,6 +74,7 @@ const constants = {
   ERROR_MESSAGES: {
     NOT_AUTHORIZED: 'You are not authorized',
     USER_NOT_FOUND: 'User not found.',
+    URL_NOT_FOUND: 'URL not found.',
     USER_ALREADY_EXISTS: 'User already exists',
     INVALID_PASSWORD: 'Invalid Password',
     RECORD_NOT_FOUND: 'Record not found.',
@@ -117,15 +111,32 @@ const constants = {
     3: 'DISCONNECTING',
   },
   AWS: {
-    BUCKET_PRIVATE: `${process.env.S3_BUCKET_PRIVATE}`,
-    BUCKET_PUBLIC: `${process.env.S3_BUCKET_PUBLIC}`,
+    BUCKET_TYPE: {
+      PRIVATE: `${process.env.S3_BUCKET_PRIVATE}`,
+      PUBLIC: `${process.env.S3_BUCKET_PUBLIC}`,
+    },
+    ACL_TYPE: {
+      PRIVATE: 'private',
+      PUBLIC: 'public-read',
+    },
+    MIME_TYPE: {
+      IMAGE: {
+        SVG: 'image/svg+xml',
+        PNG: 'image/png',
+      },
+    },
+    ASSET_FOLDER: {
+      PRIVATE: {
+        SVG: `${process.env.S3_FOLDER_PARENT}/svg`,
+      },
+      PUBLIC: {
+        PNG: `${process.env.S3_FOLDER_PARENT}/png`,
+        USER: `${process.env.S3_FOLDER_PARENT}/user`,
+        OS: `${process.env.S3_FOLDER_PARENT}/os`,
+      },
+    },
   },
-  ASSET_FOLDER_PATH: {
-    PNG: 'png',
-    SVG: 'svg',
-    USER: 'user',
-    OS: 'os',
-  },
+
   PLAN_TYPE: {
     BASIC: 'basic',
     PRO: 'pro',

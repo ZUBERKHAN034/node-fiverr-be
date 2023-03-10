@@ -26,17 +26,19 @@ class s3Helper {
     const extensionType = path.extname(pathToFile);
     const uploadParams: PutObjectCommandInput = {
       Bucket:
-        extensionType == constants.ENUMS.FILE_FORMAT.PNG ? constants.AWS.BUCKET_PUBLIC : constants.AWS.BUCKET_PRIVATE,
+        extensionType == constants.ENUMS.FILE_FORMAT.PNG
+          ? constants.AWS.BUCKET_TYPE.PUBLIC
+          : constants.AWS.BUCKET_TYPE.PRIVATE,
       Key: pathToFile,
       Body: file,
       ContentType:
         extensionType == constants.ENUMS.FILE_FORMAT.PNG
-          ? constants.ENUMS.MIME_TYPE.IMAGE.PNG
-          : constants.ENUMS.MIME_TYPE.IMAGE.SVG,
+          ? constants.AWS.MIME_TYPE.IMAGE.PNG
+          : constants.AWS.MIME_TYPE.IMAGE.SVG,
       ACL:
         extensionType == constants.ENUMS.FILE_FORMAT.PNG
-          ? constants.ENUMS.ACL_TYPE.PUBLIC
-          : constants.ENUMS.ACL_TYPE.PRIVATE,
+          ? constants.AWS.ACL_TYPE.PUBLIC
+          : constants.AWS.ACL_TYPE.PRIVATE,
     };
     const s3 = this.s3Client();
     const upload: Upload = new Upload({
@@ -62,8 +64,8 @@ class s3Helper {
     var bucketParams = {
       Bucket:
         extensionType == constants.ENUMS.FILE_FORMAT.PNG
-          ? constants.ENUMS.ACL_TYPE.PUBLIC
-          : constants.ENUMS.ACL_TYPE.PRIVATE,
+          ? constants.AWS.ACL_TYPE.PUBLIC
+          : constants.AWS.ACL_TYPE.PRIVATE,
       Key: keyName,
     };
 
@@ -84,7 +86,7 @@ class s3Helper {
       }
 
       var bucketParams = {
-        Bucket: constants.AWS.BUCKET_PRIVATE,
+        Bucket: constants.AWS.BUCKET_TYPE.PRIVATE,
         Key: keyName,
       };
       const getObject = await s3.send(new GetObjectCommand(bucketParams));
@@ -110,9 +112,9 @@ class s3Helper {
     }
 
     var bucketParams = {
-      Bucket: constants.AWS.BUCKET_PRIVATE,
+      Bucket: constants.AWS.BUCKET_TYPE.PRIVATE,
       Key: keyName,
-      ResponseContentType: constants.ENUMS.MIME_TYPE.IMAGE.SVG,
+      ResponseContentType: constants.AWS.MIME_TYPE.IMAGE.SVG,
     };
     const command = new GetObjectCommand(bucketParams);
     const signedUrl = await getSignedUrl(s3, command, { expiresIn: 3600 });
