@@ -1,5 +1,4 @@
 import { Pagination } from '../types/common';
-import { mkdir, readdir } from 'fs/promises';
 import { http } from 'follow-redirects';
 
 import fs from 'fs';
@@ -48,15 +47,6 @@ class Utility {
       // eslint-disable-next-line no-console
       console.error(error);
     });
-  }
-  public async tmpDir(): Promise<string> {
-    const path = `${__dirname}/../tmp`;
-    try {
-      await readdir(path);
-    } catch (err) {
-      await mkdir(path, { recursive: true });
-    }
-    return path as string;
   }
 }
 

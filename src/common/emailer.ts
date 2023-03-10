@@ -30,8 +30,8 @@ class Emailer {
         },
         category: 'non-promotions',
       };
-      const sendgrid = await sgMail.send(options);
-      return { status: true, sendgrid };
+      const sendGrid = await sgMail.send(options);
+      return { status: true, sendGrid };
     } catch (error) {
       return { status: false, error: error };
     }
@@ -49,8 +49,8 @@ class Emailer {
         },
         category: 'non-promotions',
       };
-      const sendgrid = await sgMail.send(options);
-      return { status: true, sendgrid };
+      const sendGrid = await sgMail.send(options);
+      return { status: true, sendGrid };
     } catch (error) {
       return { status: false, error: error };
     }
