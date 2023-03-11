@@ -1,6 +1,6 @@
+import { RequestParams } from '../types/common';
 import sgMail from '@sendgrid/mail';
 import * as fs from 'fs';
-import { RequestParams } from '../types/common';
 
 class Emailer {
   private from;

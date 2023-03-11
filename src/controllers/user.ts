@@ -1,10 +1,10 @@
-import UserService from '../services/user';
-import User from '../validations/user/user';
-import WRRequest from '../lib/wr_request';
 import { Response } from 'express';
 import { UserDetails } from '../types/request/user';
 import { RespError, WRResponse } from '../lib/wr_response';
 import { UploadFile } from '../types/request/base';
+import UserService from '../services/user';
+import User from '../validations/user/user';
+import WRRequest from '../lib/wr_request';
 import constants from '../common/constants';
 
 export default class UserController {
@@ -27,7 +27,8 @@ export default class UserController {
     const result = valSchema.validate(request.body);
     if (result.error == null) {
       const resp = await this.service.login(request.body);
-      resp.data?.token && response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, resp.data.token, { httpOnly: true });
+      resp.data?.token &&
+        response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, resp.data.token, { httpOnly: true, secure: true });
       this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));

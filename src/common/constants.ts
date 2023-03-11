@@ -74,7 +74,7 @@ const constants = {
   ERROR_MESSAGES: {
     NOT_AUTHORIZED: 'You are not authorized',
     USER_NOT_FOUND: 'User not found.',
-    URL_NOT_FOUND: 'URL not found.',
+    FILE_NOT_FOUND: 'File not found.',
     USER_ALREADY_EXISTS: 'User already exists',
     INVALID_PASSWORD: 'Invalid Password',
     RECORD_NOT_FOUND: 'Record not found.',
