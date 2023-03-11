@@ -1,4 +1,5 @@
 import type { TokenUser, UserDetails } from '../types/request/user';
+import { UploadFile } from '../types/request/base';
 import { UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
 import { RespError } from '../lib/wr_response';
@@ -8,7 +9,6 @@ import jwt from 'jsonwebtoken';
 import utility from '../lib/utility';
 import Base from './base';
 import constants from '../common/constants';
-import { UploadFile } from '../types/request/base';
 
 export default class UserService extends Base {
   private userRepo = new UserRepository();
@@ -80,6 +80,7 @@ export default class UserService extends Base {
     }
     return returnVal;
   }
+
   /**
    * Function for deleting user account
    *
@@ -139,7 +140,7 @@ export default class UserService extends Base {
         const url = image['location'];
         returnVal.data = url;
       } else {
-        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.URL_NOT_FOUND);
+        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.FILE_NOT_FOUND);
       }
     } catch (error) {
       returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);

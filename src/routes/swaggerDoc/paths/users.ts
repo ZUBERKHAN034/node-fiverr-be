@@ -213,13 +213,14 @@ const uploadUserAssets = {
         },
       },
     },
+    required: true,
   },
   responses: {
     '200': {
       description: 'Returns URL of user assets on successful upload.',
     },
     '404': {
-      description: 'URL not found.',
+      description: 'File not found.',
     },
     '500': {
       description: 'Internal server error',
