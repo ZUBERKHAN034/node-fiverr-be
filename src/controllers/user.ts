@@ -37,7 +37,6 @@ export default class UserController {
         const HTTP = {
           httpOnly: true,
         };
-        console.log(process.env.FE_BASE_URL ? HTTPS : HTTP);
         const cookieParams = process.env.FE_BASE_URL ? HTTPS : HTTP;
         response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, token, cookieParams);
       }
