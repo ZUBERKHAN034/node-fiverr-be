@@ -28,7 +28,11 @@ export default class UserController {
     if (result.error == null) {
       const resp = await this.service.login(request.body);
       resp.data?.token &&
-        response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, resp.data.token, { httpOnly: true, secure: true });
+        response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, resp.data.token, {
+          sameSite: 'none',
+          httpOnly: true,
+          secure: true,
+        });
       this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));
