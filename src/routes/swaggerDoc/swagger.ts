@@ -6,7 +6,7 @@ const apiDocumentation = {
   info: {
     version: '1.0.0',
     title: 'node-fiverr-be : (node fiverr backend) api Documentation',
-    description: 'node-fiverr-be api Documentation in swagger',
+    description: 'NOTE: You can switch between local and production sever by left side [Severs] dropdowns options.',
     termsOfService: 'https://github.com/ZUBERKHAN034/node-fiverr-be',
     contact: {
       name: 'Zuber Khan',

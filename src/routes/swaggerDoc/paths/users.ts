@@ -72,6 +72,7 @@ const registerUser = {
     },
   },
 };
+
 const loginUser = {
   tags: ['Users'],
   description: 'Login user in the system',
@@ -108,21 +109,21 @@ const loginUser = {
                 type: 'string',
                 example: '6374e19dac314421985f43f5',
               },
-              firstName: {
+              username: {
                 type: 'string',
                 example: 'John',
-              },
-              lastName: {
-                type: 'string',
-                example: 'Dou',
               },
               email: {
                 type: 'string',
                 example: 'john@gmail.com',
               },
-              role: {
+              country: {
                 type: 'string',
-                example: 'user',
+                example: 'usa',
+              },
+              isSeller: {
+                type: 'boolean',
+                example: 'false',
               },
               token: {
                 type: 'string',
@@ -133,6 +134,12 @@ const loginUser = {
           },
         },
       },
+    },
+    '404': {
+      description: 'User not found',
+    },
+    '500': {
+      description: 'Internal server error',
     },
   },
 };

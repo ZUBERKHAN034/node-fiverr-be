@@ -14,10 +14,10 @@
 
 - Service Classes
 
-  - Create service class only if business logic needs to be apply before database transaction for the specific table. Store the file in the **src/services** folder
+  - Create service class only if business logic needs to be apply before database transaction for the specific model or table or module. Store the file in the **src/services** folder
   - Repository class instance must be created.
   - Service classes will contain business logic code only
-  - File name should be same as table name
+  - File name should be same as model or table or module name
   - Class name must have **Service** word in it. Example UserService or **UserPermissionService**
 
 - Controller Classes
@@ -25,15 +25,15 @@
   - Create controller class for each module. Store the file in the **src/controllers** folder
   - Service class instance must be created. Never create repository class directly into the controller.
   - Controller classes will contain the code of validating the Request. After validating the request, it will send the request instance to the service class.
-  - File name should be same as table/module name
+  - File name should be same as model or table or module name.
   - Class name must have **Controller** word in it. Example **UserController** or **UserPermissionController**
 
 - Route Classes
 
-  - Create Route class for each module or table. Store the file in the **src/routes** folder.
-  - All the table/module related routes must be defined in the Route class.
+  - Create Route class for each module or model or table. Store the file in the **src/routes** folder.
+  - All the table or model or module related routes must be defined in the Route class.
   - Create controller instance
-  - File name should be same as table/module name.
+  - File name should be same as model or table or module name.
   - Class name must have **Route** word in it. Example **UserRoute** or **UserPermissionRoute**
 
 - Database environments
@@ -59,4 +59,4 @@
 - Use following command to watch dev server
   - **npm run dev**
 - To kill port if already running
-  - **sudo kill -9 $(sudo lsof -t -i:8080)**
+  - **sudo kill -9 $(sudo lsof -t -i:8002)**
