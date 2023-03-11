@@ -1,19 +1,24 @@
 const constants = {
   ENUMS: {
+    FE_BASE_URL: 'http://localhost:5173',
+
     ORDER: {
       ASC: 'asc',
       DESC: 'desc',
     },
+
     ROLE: {
       USER: 'user',
       ADMIN: 'admin',
     },
+
     HASH_TYPES: {
       CREATE_NEW_ACCT: 'CREATE_NEW_ACCT',
       RESET_PASSWORD: 'RESET_PASSWORD',
       UPDATE_EMAIL: 'UPDATE_EMAIL',
       INVITE_EMAIL: 'INVITE_EMAIL',
     },
+
     USER_LIST_SORT_BY: {
       FULL_NAME: 'fullName',
       EMAIL: 'email',
@@ -24,36 +29,44 @@ const constants = {
       PLAN: 'plan',
       TYPE: 'type',
     },
+
     FILE_FORMAT: {
       PNG: '.png',
       SVG: '.svg',
     },
+
     LOGIN_TYPE: {
       GOOGLE: 'GOOGLE',
       FACEBOOK: 'FACEBOOK',
       CUSTOM: 'CUSTOM',
     },
+
     HASH_EXPIRES_IN: {
       DEFAULT_EXPIRY: 10,
       INVITE_EXPIRY: 1440,
     },
+
     CHECKOUT_MODE: {
       PAYMENT: 'payment',
       SUBSCRIPTION: 'subscription',
       SETUP: 'setup',
     },
+
     USER_STATUS: {
       INVITED: 'invited',
       NONE: null,
     },
+
     PAYMENT_STATUS: {
       FAILED: 'failed',
       PAID: 'paid',
     },
+
     PAYMENT_DESCRIPTION: {
       SUBSCRIPTION: 'subscription',
       PURCHASE: 'purchase',
     },
+
     TOKENS: {
       ACCESS_TOKEN: 'accessToken',
     },
@@ -71,6 +84,7 @@ const constants = {
     ERR_410: 410,
     ERR_412: 412,
   },
+
   ERROR_MESSAGES: {
     NOT_AUTHORIZED: 'You are not authorized',
     USER_NOT_FOUND: 'User not found.',
@@ -94,6 +108,7 @@ const constants = {
     PLAN_NOT_FOUND: 'Plan not found.',
     FORGOT_PASSWORD_REQUEST: `The account currently has no password set. We recommend requesting a 'Forgot Password'.`,
   },
+
   SUCCESS_MESSAGES: {
     EMAIL_SEND: 'Email send successfully',
     OK: 'OK',
@@ -103,32 +118,39 @@ const constants = {
     PASSWORD_RESET: 'Password reset successfully',
     EMAIL_UPDATED: 'Email updated successfully',
   },
+
   INS_EXCLUDE_COLS: ['created_at', 'updated_at', 'deleted_at'],
+
   DB_STATES: {
     0: 'DISCONNECTED',
     1: 'CONNECTED',
     2: 'CONNECTING',
     3: 'DISCONNECTING',
   },
+
   AWS: {
     BUCKET_TYPE: {
       PRIVATE: `${process.env.S3_BUCKET_PRIVATE}`,
       PUBLIC: `${process.env.S3_BUCKET_PUBLIC}`,
     },
+
     ACL_TYPE: {
       PRIVATE: 'private',
       PUBLIC: 'public-read',
     },
+
     MIME_TYPE: {
       IMAGE: {
         SVG: 'image/svg+xml',
         PNG: 'image/png',
       },
     },
+
     ASSET_FOLDER: {
       PRIVATE: {
         SVG: `${process.env.S3_FOLDER_PARENT}/svg`,
       },
+
       PUBLIC: {
         PNG: `${process.env.S3_FOLDER_PARENT}/png`,
         USER: `${process.env.S3_FOLDER_PARENT}/user`,
@@ -142,6 +164,7 @@ const constants = {
     PRO: 'pro',
     ADVANCE: 'advance',
   },
+
   SEND_GRID: {
     SENDER_NAME: 'fiverr',
     SENDER_EMAIL: `no-reply@${process.env.SEND_GRID_DOMAIN}`,

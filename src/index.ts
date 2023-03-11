@@ -11,13 +11,16 @@ import compression from 'compression';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import router from './routes';
+import constants from './common/constants';
 import { expressjwt } from 'express-jwt';
 import { DBManager } from './db/db_manager';
 
 export class ApiServer {
   public app: express.Application;
   private PORT;
-  private corsOptions = () => cors({ origin: process.env.FE_BASE_URL, credentials: true });
+  private corsOptions = () => {
+    return cors({ origin: process.env.FE_BASE_URL || constants.ENUMS.FE_BASE_URL, credentials: true });
+  };
 
   // private resp = new TPCResponse();
 

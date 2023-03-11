@@ -27,12 +27,20 @@ export default class UserController {
     const result = valSchema.validate(request.body);
     if (result.error == null) {
       const resp = await this.service.login(request.body);
-      resp.data?.token &&
-        response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, resp.data.token, {
+      if (resp.data?.token) {
+        const token = resp.data.token;
+        const HTTPS = {
           sameSite: 'none',
           httpOnly: true,
           secure: true,
-        });
+        };
+        const HTTP = {
+          httpOnly: true,
+        };
+        console.log(process.env.FE_BASE_URL ? HTTPS : HTTP);
+        const cookieParams = process.env.FE_BASE_URL ? HTTPS : HTTP;
+        response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, token, cookieParams);
+      }
       this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));
