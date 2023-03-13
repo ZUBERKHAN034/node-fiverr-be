@@ -37,7 +37,7 @@ export default class UserService extends Base {
         await this.userRepo.create(user);
         returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;
       } else {
-        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_401, constants.ERROR_MESSAGES.USER_ALREADY_EXISTS);
+        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_409, constants.ERROR_MESSAGES.USER_ALREADY_EXISTS);
       }
     } catch (error) {
       returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
