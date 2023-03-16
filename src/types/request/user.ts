@@ -10,11 +10,3 @@ export interface UserDetails extends ParamsID {
   desc?: string;
   isSeller?: string;
 }
-
-export interface TokenUser {
-  _id: string;
-  username: string;
-  email: string;
-  country: string;
-  isSeller: boolean;
-}

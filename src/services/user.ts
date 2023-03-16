@@ -1,5 +1,5 @@
-import type { TokenUser, UserDetails } from '../types/request/user';
-import { UploadFile } from '../types/request/base';
+import type { UserDetails } from '../types/request/user';
+import { TokenUser, UploadFile } from '../types/request/base';
 import { UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
 import { RespError } from '../lib/wr_response';
@@ -24,7 +24,7 @@ export default class UserService extends Base {
     try {
       const isUser = await this.userRepo.userByEmail(params.email);
       if (utility.isEmpty(isUser)) {
-        const user = {
+        const usr = {
           username: params.username,
           email: params.email,
           password: params.password,
@@ -34,7 +34,7 @@ export default class UserService extends Base {
           phone: params.phone,
           isSeller: params.isSeller == 'true' ? true : false,
         } as IUser;
-        await this.userRepo.create(user);
+        await this.userRepo.create(usr);
         returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_409, constants.ERROR_MESSAGES.USER_ALREADY_EXISTS);

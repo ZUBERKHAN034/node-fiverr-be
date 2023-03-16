@@ -12,10 +12,11 @@ export default class UserController {
   private resp = new WRResponse();
 
   public async register(request: WRRequest<undefined, UserDetails, undefined>, response: Response) {
+    const params = request.body;
     const valSchema = new User().getRegisterVS();
-    const result = valSchema.validate(request.body);
+    const result = valSchema.validate(params);
     if (result.error == null) {
-      const resp = await this.service.register(request.body);
+      const resp = await this.service.register(params);
       this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));
@@ -23,10 +24,11 @@ export default class UserController {
   }
 
   public async login(request: WRRequest<undefined, UserDetails, undefined>, response: Response) {
+    const params = request.body;
     const valSchema = new User().getLoginVS();
-    const result = valSchema.validate(request.body);
+    const result = valSchema.validate(params);
     if (result.error == null) {
-      const resp = await this.service.login(request.body);
+      const resp = await this.service.login(params);
       if (resp.data?.token) {
         const token = resp.data.token;
         const HTTPS = {

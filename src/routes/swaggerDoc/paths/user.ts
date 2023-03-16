@@ -158,7 +158,7 @@ const deleteUser = {
       description: 'Return OK response on successful delete operation',
     },
     '401': {
-      description: 'You are unauthorized',
+      description: 'You are unauthenticated',
     },
     '404': {
       description: 'User not found',
@@ -183,7 +183,7 @@ const logoutUser = {
       description: 'Return OK response on successful logged out',
     },
     '401': {
-      description: 'You are unauthorized',
+      description: 'You are unauthenticated',
     },
     '404': {
       description: 'User not found',
