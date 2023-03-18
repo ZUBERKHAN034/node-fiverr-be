@@ -24,5 +24,5 @@ export interface SearchParams extends Query {
   min?: string;
   max?: string;
   search?: string;
-  sort?: string;
+  orderBy?: string;
 }

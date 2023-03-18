@@ -14,7 +14,7 @@ export interface IGig extends Document {
   shortDesc: string;
   deliveryTime: number;
   revisionNumber: number;
-  features?: string[];
+  features: string[];
   sales?: number;
   createdAt?: number;
   updatedAt?: number;
@@ -83,6 +83,7 @@ const GigSchema = new Schema(
     },
     features: {
       type: [String],
+      required: [true, 'One feature is required'],
       default: [],
     },
     sales: {

@@ -1,4 +1,4 @@
-import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets } from './user';
+import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser } from './user';
 import { createGig, deleteGig, getGig, getGigs } from './gig';
 
 const paths = {
@@ -18,6 +18,9 @@ const paths = {
   '/user/logout': {
     post: logoutUser,
   },
+  '/services/user/{id}': {
+    get: getUser,
+  },
   // GIG
   '/gig': {
     post: createGig,
@@ -29,7 +32,7 @@ const paths = {
     get: getGig,
   },
   '/services/gigs': {
-    get: getGigs,
+    post: getGigs,
   },
 };
 

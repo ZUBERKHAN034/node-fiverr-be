@@ -8,7 +8,7 @@ import Base from './base';
 import constants from '../common/constants';
 import utility from '../lib/utility';
 
-export default class UserService extends Base {
+export default class GigService extends Base {
   private gigRepo = new GigRepository();
 
   /**
@@ -24,7 +24,7 @@ export default class UserService extends Base {
       // If user is a seller
       if (user.isSeller === true) {
         const gig = {
-          userId: user._id as string,
+          userId: user._id,
           title: params.title,
           desc: params.desc,
           totalStars: params.totalStars,
@@ -32,7 +32,7 @@ export default class UserService extends Base {
           cat: params.cat,
           price: params.price,
           cover: params.cover,
-          images: params.images,
+          images: params.images ? params.images : [params.cover],
           shortTitle: params.shortTitle,
           shortDesc: params.shortDesc,
           deliveryTime: params.deliveryTime,
@@ -62,7 +62,7 @@ export default class UserService extends Base {
     try {
       // If user is a seller
       if (user.isSeller === true) {
-        const gig = await this.gigRepo.findGig(params.id, user._id);
+        const gig = await this.gigRepo.findGigWithUser(params.id, user._id);
         // If gig exists
         if (!utility.isEmpty(gig)) {
           await this.gigRepo.delete(params.id);
@@ -80,7 +80,7 @@ export default class UserService extends Base {
   }
 
   /**
-   * Function for getting gig
+   * Function for getting gig by id
    *
    * @param {ParamsID}
    * @returns {ServiceReturnVal}
@@ -88,7 +88,7 @@ export default class UserService extends Base {
   public async gig(params: ParamsID): Promise<ServiceReturnVal<IGig>> {
     const returnVal: ServiceReturnVal<IGig> = {};
     try {
-      const gig: IGig = await this.gigRepo.findById(params.id);
+      const gig: IGig = await this.gigRepo.findGig(params);
       // If gig exists
       if (!utility.isEmpty(gig)) {
         returnVal.data = gig;
@@ -102,7 +102,7 @@ export default class UserService extends Base {
   }
 
   /**
-   * Function for getting gigs
+   * Function for getting gigs with filters
    *
    * @param {SearchParams}
    * @returns {ServiceReturnVal}

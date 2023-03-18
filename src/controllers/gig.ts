@@ -25,7 +25,7 @@ export default class GigController {
 
   public async delete(request: WRRequest<undefined, undefined, ParamsID>, response: Response) {
     const params = request.params;
-    const valSchema = new Gig().getDeleteVS();
+    const valSchema = new Gig().getIdVS();
     const result = valSchema.validate(params);
     const currentUser = request.currentUser;
     if (result.error == null) {
@@ -38,7 +38,7 @@ export default class GigController {
 
   public async gig(request: WRRequest<undefined, undefined, ParamsID>, response: Response) {
     const params = request.params;
-    const valSchema = new Gig().getDeleteVS();
+    const valSchema = new Gig().getIdVS();
     const result = valSchema.validate(params);
     if (result.error == null) {
       const resp = await this.service.gig(params);
@@ -48,8 +48,8 @@ export default class GigController {
     }
   }
 
-  public async gigs(request: WRRequest<SearchParams, undefined, undefined>, response: Response) {
-    const params = request.query;
+  public async gigs(request: WRRequest<undefined, SearchParams, undefined>, response: Response) {
+    const params = request.body;
     const valSchema = new Gig().getGigsVS();
     const result = valSchema.validate(params);
     if (result.error == null) {

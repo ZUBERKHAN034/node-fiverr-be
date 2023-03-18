@@ -149,13 +149,10 @@ const constants = {
 
     ASSET_FOLDER: {
       PRIVATE: {
-        SVG: `${process.env.S3_FOLDER_PARENT}/svg`,
-      },
-
-      PUBLIC: {
-        PNG: `${process.env.S3_FOLDER_PARENT}/png`,
         USER: `${process.env.S3_FOLDER_PARENT}/user`,
-        OS: `${process.env.S3_FOLDER_PARENT}/os`,
+      },
+      PUBLIC: {
+        USER: `${process.env.S3_FOLDER_PARENT}/user`,
       },
     },
   },

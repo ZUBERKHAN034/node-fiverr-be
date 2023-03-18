@@ -4,7 +4,7 @@ export default class Base {
   protected isObjectId(isRequired: boolean): AnySchema {
     let schema = Joi.string()
       .regex(/^[0-9a-fA-F]{24}$/)
-      .message(`id is not valid ObjectId`);
+      .message(`Id is not valid!`);
     if (isRequired) {
       schema = schema.required();
     }
@@ -58,7 +58,7 @@ export default class Base {
   }
 
   protected isStringArray(isRequired: boolean): AnySchema {
-    let schema = Joi.array().items(Joi.string().trim());
+    let schema = Joi.array().items(Joi.string().trim().required());
     if (isRequired) {
       schema = schema.required();
     }
@@ -75,6 +75,13 @@ export default class Base {
     schema.search = this.isString(false);
     schema.isArchived = this.isBoolean(true);
 
+    return Joi.object(schema);
+  }
+
+  public getIdVS(): ObjectSchema {
+    const schema: PartialSchemaMap = {
+      id: this.isObjectId(true),
+    };
     return Joi.object(schema);
   }
 }

@@ -1,7 +1,15 @@
-import Joi, { ObjectSchema, PartialSchemaMap } from 'joi';
+import Joi, { AnySchema, ObjectSchema, PartialSchemaMap } from 'joi';
 import Base from '../base';
 
-export default class User extends Base {
+export default class Gig extends Base {
+  private orderBy(isRequired: boolean): AnySchema {
+    let schema = Joi.string().trim().valid('createdAt', 'sales');
+    if (isRequired) {
+      schema = schema.required();
+    }
+    return schema;
+  }
+
   public getCreateVS(): ObjectSchema {
     const schema: PartialSchemaMap = {
       title: this.isString(true),
@@ -13,20 +21,13 @@ export default class User extends Base {
       shortDesc: this.isString(true),
       deliveryTime: this.isNumber(true),
       revisionNumber: this.isNumber(true),
+      features: this.isStringArray(true),
       sales: this.isNumber(false),
       starNumber: this.isNumber(false),
       totalStars: this.isNumber(false),
       images: this.isStringArray(false),
-      features: this.isStringArray(false),
     };
 
-    return Joi.object(schema);
-  }
-
-  public getDeleteVS(): ObjectSchema {
-    const schema: PartialSchemaMap = {
-      id: this.isObjectId(true),
-    };
     return Joi.object(schema);
   }
 
@@ -37,7 +38,7 @@ export default class User extends Base {
       min: this.isNumber(false),
       max: this.isNumber(false),
       search: this.isString(false),
-      sort: this.isSort(false),
+      orderBy: this.orderBy(false),
     };
 
     return Joi.object(schema);

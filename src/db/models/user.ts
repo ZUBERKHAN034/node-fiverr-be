@@ -47,6 +47,8 @@ const UserSchema = new Schema(
     },
     img: {
       type: String,
+      default:
+        'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg',
     },
     phone: {
       match: phoneMatch,

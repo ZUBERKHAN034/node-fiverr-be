@@ -87,6 +87,7 @@ const createGig = {
                 example:
                   'https://assets-global.website-files.com/606a802fcaa89bc357508cad/61a66ca40534663ab0f2195f_Gig%20image%20guidelines%20-%20WIIF%20sellers-p-1080.png',
               },
+              required: false,
             },
             features: {
               type: 'array',
@@ -94,6 +95,7 @@ const createGig = {
                 type: 'string',
                 example: 'feature-1',
               },
+              required: true,
             },
           },
         },
@@ -169,7 +171,7 @@ const getGig = {
         type: 'string',
         example: 'd638d4e43708998526e20279',
       },
-      description: 'Gig id',
+      description: 'Gig Id',
     },
   ],
   responses: {
@@ -189,68 +191,42 @@ const getGigs = {
   tags: ['Gigs'],
   description: 'Get All Gigs',
   operationId: 'getGigs',
-  parameters: [
-    {
-      in: 'query',
-      name: 'userId',
-      required: false,
-      schema: {
-        type: 'string',
-        example: 'd638d4e43708998526e20279',
+  requestBody: {
+    content: {
+      'application/x-www-form-urlencoded': {
+        schema: {
+          type: 'object',
+          properties: {
+            userId: {
+              type: 'string',
+              example: 'd638d4e43708998526e20279',
+            },
+            cat: {
+              type: 'string',
+              example: 'web',
+            },
+            min: {
+              type: 'number',
+              example: 10,
+            },
+            max: {
+              type: 'number',
+              example: 100,
+            },
+            search: {
+              type: 'string',
+              example: 'web developer',
+            },
+            orderBy: {
+              type: 'string',
+              enum: ['createdAt', 'sales'],
+              example: 'createdAt',
+            },
+          },
+        },
       },
-      description: 'Id of user',
     },
-    {
-      in: 'query',
-      name: 'cat',
-      required: false,
-      schema: {
-        type: 'string',
-        example: 'web',
-      },
-      description: 'Category of Gig',
-    },
-    {
-      in: 'query',
-      name: 'min',
-      required: false,
-      schema: {
-        type: 'number',
-        example: 10,
-      },
-      description: 'Minimum Price of Gig',
-    },
-    {
-      in: 'query',
-      name: 'max',
-      required: false,
-      schema: {
-        type: 'number',
-        example: 100,
-      },
-      description: 'Maximum Price of Gig',
-    },
-    {
-      in: 'query',
-      name: 'search',
-      required: false,
-      schema: {
-        type: 'string',
-        example: 'web developer',
-      },
-      description: 'Search on Gig Title',
-    },
-    {
-      in: 'query',
-      name: 'sort',
-      required: false,
-      schema: {
-        type: 'string',
-        enum: ['asc', 'desc'],
-      },
-      description: 'Sorting by creation date',
-    },
-  ],
+  },
   responses: {
     '200': {
       description: 'Returns Array of Gigs Details or Empty Array.',
