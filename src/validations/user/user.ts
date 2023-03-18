@@ -24,10 +24,4 @@ export default class User extends Base {
     };
     return Joi.object(schema);
   }
-  public getDeleteVS(): ObjectSchema {
-    const schema: PartialSchemaMap = {
-      id: this.id(true),
-    };
-    return Joi.object(schema);
-  }
 }

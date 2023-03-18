@@ -16,3 +16,11 @@ export interface UploadFile {
 export interface JSONWithFileUpload extends UploadFile {
   document?: string;
 }
+
+export interface TokenUser {
+  _id: string;
+  username: string;
+  email: string;
+  country: string;
+  isSeller: boolean;
+}

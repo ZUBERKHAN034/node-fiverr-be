@@ -88,6 +88,7 @@ const constants = {
   ERROR_MESSAGES: {
     NOT_AUTHORIZED: 'You are not authorized',
     USER_NOT_FOUND: 'User not found.',
+    GIG_NOT_FOUND: 'Gig not found.',
     FILE_NOT_FOUND: 'File not found.',
     USER_ALREADY_EXISTS: 'User already exists',
     INVALID_PASSWORD: 'Invalid Password',
@@ -148,13 +149,10 @@ const constants = {
 
     ASSET_FOLDER: {
       PRIVATE: {
-        SVG: `${process.env.S3_FOLDER_PARENT}/svg`,
-      },
-
-      PUBLIC: {
-        PNG: `${process.env.S3_FOLDER_PARENT}/png`,
         USER: `${process.env.S3_FOLDER_PARENT}/user`,
-        OS: `${process.env.S3_FOLDER_PARENT}/os`,
+      },
+      PUBLIC: {
+        USER: `${process.env.S3_FOLDER_PARENT}/user`,
       },
     },
   },

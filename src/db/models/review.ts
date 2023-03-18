@@ -1,8 +1,8 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IReview extends Document {
-  gigId: string;
-  userId: string;
+  gigId: Types.ObjectId;
+  userId: Types.ObjectId;
   star: number;
   desc: string;
   createdAt?: number;
@@ -14,14 +14,17 @@ export interface IReview extends Document {
  * @type {Schema}
  */
 
+const ObjectId = Schema.Types.ObjectId;
 const ReviewSchema = new Schema(
   {
     gigId: {
-      type: String,
+      type: ObjectId,
+      ref: 'Gig',
       required: true,
     },
     userId: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
       required: true,
     },
     star: {

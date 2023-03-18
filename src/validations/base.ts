@@ -1,10 +1,10 @@
 import Joi, { AnySchema, ObjectSchema, PartialSchemaMap } from 'joi';
 
 export default class Base {
-  protected id(isRequired: boolean): AnySchema {
+  protected isObjectId(isRequired: boolean): AnySchema {
     let schema = Joi.string()
       .regex(/^[0-9a-fA-F]{24}$/)
-      .message(`id is not valid ObjectId`);
+      .message(`Id is not valid!`);
     if (isRequired) {
       schema = schema.required();
     }
@@ -49,8 +49,16 @@ export default class Base {
     return schema;
   }
 
-  protected order(isRequired: boolean): AnySchema {
+  protected isSort(isRequired: boolean): AnySchema {
     let schema = Joi.string().trim().valid('asc', 'desc');
+    if (isRequired) {
+      schema = schema.required();
+    }
+    return schema;
+  }
+
+  protected isStringArray(isRequired: boolean): AnySchema {
+    let schema = Joi.array().items(Joi.string().trim().required());
     if (isRequired) {
       schema = schema.required();
     }
@@ -62,11 +70,18 @@ export default class Base {
 
     schema.page = this.isString(true);
     schema.limit = this.isString(true);
-    schema.order = this.order(true);
+    schema.order = this.isSort(true);
     schema.orderBy = this.isString(true);
     schema.search = this.isString(false);
     schema.isArchived = this.isBoolean(true);
 
+    return Joi.object(schema);
+  }
+
+  public getIdVS(): ObjectSchema {
+    const schema: PartialSchemaMap = {
+      id: this.isObjectId(true),
+    };
     return Joi.object(schema);
   }
 }

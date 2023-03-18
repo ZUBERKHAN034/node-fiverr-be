@@ -1,5 +1,5 @@
-import type { TokenUser, UserDetails } from '../types/request/user';
-import { UploadFile } from '../types/request/base';
+import type { UserDetails } from '../types/request/user';
+import { ParamsID, TokenUser, UploadFile } from '../types/request/base';
 import { UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
 import { RespError } from '../lib/wr_response';
@@ -24,7 +24,7 @@ export default class UserService extends Base {
     try {
       const isUser = await this.userRepo.userByEmail(params.email);
       if (utility.isEmpty(isUser)) {
-        const user = {
+        const usr = {
           username: params.username,
           email: params.email,
           password: params.password,
@@ -34,7 +34,7 @@ export default class UserService extends Base {
           phone: params.phone,
           isSeller: params.isSeller == 'true' ? true : false,
         } as IUser;
-        await this.userRepo.create(user);
+        await this.userRepo.create(usr);
         returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_409, constants.ERROR_MESSAGES.USER_ALREADY_EXISTS);
@@ -54,7 +54,12 @@ export default class UserService extends Base {
   public async login(params: UserDetails): Promise<ServiceReturnVal<any>> {
     const returnVal: ServiceReturnVal<any> = {};
     try {
-      const user = await this.userRepo.findOne({ username: params.username });
+      const user = await this.userRepo.findOne({
+        $or: [
+          { username: { $regex: params.username, $options: 'i' } },
+          { email: { $regex: params.username, $options: 'i' } },
+        ],
+      });
       // If user exists
       if (!utility.isEmpty(user)) {
         const match = await bcrypt.compare(params.password, user.password);
@@ -141,6 +146,29 @@ export default class UserService extends Base {
         returnVal.data = url;
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.FILE_NOT_FOUND);
+      }
+    } catch (error) {
+      returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
+    }
+    return returnVal;
+  }
+
+  /**
+   * Function for getting user account
+   *
+   * @param {ParamsID}
+   * @returns {ServiceReturnVal}
+   */
+  public async get(params: ParamsID): Promise<ServiceReturnVal<IUser>> {
+    const returnVal: ServiceReturnVal<IUser> = {};
+    try {
+      const user: IUser = await this.userRepo.findById(params.id);
+      // If user exists
+      if (!utility.isEmpty(user)) {
+        user.password = undefined;
+        returnVal.data = user;
+      } else {
+        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.USER_NOT_FOUND);
       }
     } catch (error) {
       returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);

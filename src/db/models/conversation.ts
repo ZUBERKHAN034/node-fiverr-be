@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IConversation extends Document {
-  id: string;
   sellerId: string;
   buyerId: string;
   readBySeller: boolean;
@@ -18,11 +17,6 @@ export interface IConversation extends Document {
 
 const ConversationSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     sellerId: {
       type: String,
       required: true,

@@ -158,7 +158,7 @@ const deleteUser = {
       description: 'Return OK response on successful delete operation',
     },
     '401': {
-      description: 'You are unauthorized',
+      description: 'You are unauthenticated',
     },
     '404': {
       description: 'User not found',
@@ -183,7 +183,7 @@ const logoutUser = {
       description: 'Return OK response on successful logged out',
     },
     '401': {
-      description: 'You are unauthorized',
+      description: 'You are unauthenticated',
     },
     '404': {
       description: 'User not found',
@@ -198,7 +198,6 @@ const uploadUserAssets = {
   tags: ['Users'],
   description: 'Upload User Assets',
   operationId: 'uploadUserAssets',
-
   requestBody: {
     content: {
       'multipart/form-data': {
@@ -228,4 +227,33 @@ const uploadUserAssets = {
   },
 };
 
-export { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, security };
+const getUser = {
+  tags: ['Users'],
+  description: 'get User Account by Id',
+  operationId: 'getUser',
+  parameters: [
+    {
+      in: 'path',
+      name: 'id',
+      required: true,
+      schema: {
+        type: 'string',
+        example: '6411ae6dd032c105a2f82d9d',
+      },
+      description: 'User Id',
+    },
+  ],
+  responses: {
+    '200': {
+      description: 'Return Users Details',
+    },
+    '404': {
+      description: 'User not found',
+    },
+    '500': {
+      description: 'Internal server error',
+    },
+  },
+};
+
+export { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser, security };

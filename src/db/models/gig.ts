@@ -1,7 +1,7 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IGig extends Document {
-  userId: string;
+  userId: Types.ObjectId;
   title: string;
   desc: string;
   totalStars?: number;
@@ -14,7 +14,7 @@ export interface IGig extends Document {
   shortDesc: string;
   deliveryTime: number;
   revisionNumber: number;
-  features?: string[];
+  features: string[];
   sales?: number;
   createdAt?: number;
   updatedAt?: number;
@@ -25,10 +25,12 @@ export interface IGig extends Document {
  * @type {Schema}
  */
 
+const ObjectId = Schema.Types.ObjectId;
 const GigSchema = new Schema(
   {
     userId: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
       required: true,
     },
     title: {
@@ -61,6 +63,7 @@ const GigSchema = new Schema(
     },
     images: {
       type: [String],
+      default: [],
     },
     shortTitle: {
       type: String,
@@ -80,6 +83,8 @@ const GigSchema = new Schema(
     },
     features: {
       type: [String],
+      required: [true, 'One feature is required'],
+      default: [],
     },
     sales: {
       type: Number,

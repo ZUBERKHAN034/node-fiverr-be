@@ -1,7 +1,7 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IOrder extends Document {
-  gigId: string;
+  gigId: Types.ObjectId;
   img?: string;
   title: string;
   price: number;
@@ -18,10 +18,12 @@ export interface IOrder extends Document {
  * @type {Schema}
  */
 
+const ObjectId = Schema.Types.ObjectId;
 const OrderSchema = new Schema(
   {
     gigId: {
-      type: String,
+      type: ObjectId,
+      ref: 'Gig',
       required: true,
     },
     img: {

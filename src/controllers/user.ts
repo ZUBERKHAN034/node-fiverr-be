@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { UserDetails } from '../types/request/user';
 import { RespError, WRResponse } from '../lib/wr_response';
-import { UploadFile } from '../types/request/base';
+import { ParamsID, UploadFile } from '../types/request/base';
 import UserService from '../services/user';
 import User from '../validations/user/user';
 import WRRequest from '../lib/wr_request';
@@ -12,10 +12,11 @@ export default class UserController {
   private resp = new WRResponse();
 
   public async register(request: WRRequest<undefined, UserDetails, undefined>, response: Response) {
+    const params = request.body;
     const valSchema = new User().getRegisterVS();
-    const result = valSchema.validate(request.body);
+    const result = valSchema.validate(params);
     if (result.error == null) {
-      const resp = await this.service.register(request.body);
+      const resp = await this.service.register(params);
       this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));
@@ -23,10 +24,11 @@ export default class UserController {
   }
 
   public async login(request: WRRequest<undefined, UserDetails, undefined>, response: Response) {
+    const params = request.body;
     const valSchema = new User().getLoginVS();
-    const result = valSchema.validate(request.body);
+    const result = valSchema.validate(params);
     if (result.error == null) {
-      const resp = await this.service.login(request.body);
+      const resp = await this.service.login(params);
       if (resp.data?.token) {
         const token = resp.data.token;
         const HTTPS = {
@@ -60,10 +62,23 @@ export default class UserController {
     }
     this.resp.resp(response).send(resp);
   }
+
   public async upload(request: WRRequest<undefined, UploadFile, undefined>, response: Response) {
     const params = request.body;
     params.files = request.files;
     const resp = await this.service.upload(params);
     this.resp.resp(response).send(resp);
+  }
+
+  public async get(request: WRRequest<undefined, undefined, ParamsID>, response: Response) {
+    const params = request.params;
+    const valSchema = new User().getIdVS();
+    const result = valSchema.validate(params);
+    if (result.error == null) {
+      const resp = await this.service.get(params);
+      this.resp.resp(response).send(resp);
+    } else {
+      this.resp.resp(response).error(RespError.validation(result.error.message));
+    }
   }
 }

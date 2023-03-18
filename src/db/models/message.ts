@@ -1,8 +1,8 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IMessage extends Document {
-  conversationId: string;
-  userId: string;
+  conversationId: Types.ObjectId;
+  userId: Types.ObjectId;
   desc: string;
   createdAt?: number;
   updatedAt?: number;
@@ -13,14 +13,17 @@ export interface IMessage extends Document {
  * @type {Schema}
  */
 
+const ObjectId = Schema.Types.ObjectId;
 const MessageSchema = new Schema(
   {
     conversationId: {
-      type: String,
+      type: ObjectId,
+      ref: 'Conversation',
       required: true,
     },
     userId: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
       required: true,
     },
     desc: {

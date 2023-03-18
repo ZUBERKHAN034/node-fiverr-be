@@ -5,7 +5,7 @@ import fs from 'fs';
 import crypto from 'crypto';
 class Utility {
   public isEmpty(val: string | any): boolean {
-    return val == null || val === null || val.length === 0 || Object.keys(val).length === 0;
+    return val === null || val == null || val.length === 0 || Object.keys(val).length === 0;
   }
 
   public pagination(page: number, limit: number): Pagination {
