@@ -236,4 +236,5 @@ const getGigs = {
     },
   },
 };
+
 export { createGig, deleteGig, getGig, getGigs, security };
