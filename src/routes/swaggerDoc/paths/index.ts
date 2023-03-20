@@ -1,5 +1,6 @@
 import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser } from './user';
 import { createGig, deleteGig, getGig, getGigs } from './gig';
+import { createReview, deleteReview, getReviewsByGigId } from './review';
 
 const paths = {
   // USER
@@ -33,6 +34,16 @@ const paths = {
   },
   '/services/gigs': {
     post: getGigs,
+  },
+  // REVIEW
+  '/review': {
+    post: createReview,
+  },
+  '/review/{id}': {
+    delete: deleteReview,
+  },
+  '/services/reviews/{id}': {
+    get: getReviewsByGigId,
   },
 };
 
