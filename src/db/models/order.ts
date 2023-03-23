@@ -2,11 +2,11 @@ import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IOrder extends Document {
   gigId: Types.ObjectId;
-  img?: string;
+  img: string;
   title: string;
   price: number;
-  sellerId: string;
-  buyerId: string;
+  sellerId: Types.ObjectId;
+  buyerId: Types.ObjectId;
   isCompleted?: boolean;
   paymentIntent: string;
   createdAt?: number;
@@ -28,6 +28,7 @@ const OrderSchema = new Schema(
     },
     img: {
       type: String,
+      required: true,
     },
     title: {
       type: String,
@@ -38,11 +39,13 @@ const OrderSchema = new Schema(
       required: true,
     },
     sellerId: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
       required: true,
     },
     buyerId: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
       required: true,
     },
     isCompleted: {
