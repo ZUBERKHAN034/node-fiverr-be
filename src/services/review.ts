@@ -84,7 +84,7 @@ export default class ReviewService extends Base {
   /**
    * Function for getting reviews with gigId
    *
-   * @param {SearchParams}
+   * @param {ParamsID}
    * @returns {ServiceReturnVal}
    */
   public async reviews(params: ParamsID): Promise<ServiceReturnVal<Array<IReview>>> {

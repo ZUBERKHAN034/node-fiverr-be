@@ -1,11 +1,10 @@
 import { Response } from 'express';
 import { ReviewDetails } from '../types/request/review';
-// import { ParamsID } from '../types/request/base';
+import { ParamsID } from '../types/request/base';
 import { RespError, WRResponse } from '../lib/wr_response';
 import ReviewService from '../services/review';
 import Review from '../validations/review/review';
 import WRRequest from '../lib/wr_request';
-import { ParamsID } from '../types/request/base';
 
 export default class ReviewController {
   private service = new ReviewService();

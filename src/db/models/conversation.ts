@@ -1,8 +1,8 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IConversation extends Document {
-  sellerId: string;
-  buyerId: string;
+  sellerId: Types.ObjectId;
+  buyerId: Types.ObjectId;
   readBySeller: boolean;
   readByBuyer: boolean;
   lastMessage?: string;
@@ -14,15 +14,17 @@ export interface IConversation extends Document {
  * Conversation schema for mongoose
  * @type {Schema}
  */
-
+const ObjectId = Schema.Types.ObjectId;
 const ConversationSchema = new Schema(
   {
     sellerId: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
       required: true,
     },
     buyerId: {
-      type: String,
+      type: ObjectId,
+      ref: 'User',
       required: true,
     },
     readBySeller: {

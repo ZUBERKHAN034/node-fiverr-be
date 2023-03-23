@@ -18,7 +18,7 @@ export default class GigRepository extends BaseRepository<IGig> {
 
     // Match stage to filter documents
     const match = {};
-    if (params.userId) match['userId'] = params.userId;
+    if (params.userId) match['userId'] = this.toObjectId(params.userId);
     if (params.cat) match['cat'] = params.cat;
     if (params.search) match['title'] = { $regex: params.search, $options: 'i' };
     if (params.min && params.max) match['price'] = { $gte: parseInt(params.min), $lte: parseInt(params.max) };
