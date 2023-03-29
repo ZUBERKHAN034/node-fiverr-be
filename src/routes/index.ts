@@ -3,6 +3,7 @@ import UserRoute from './user/user';
 import GigRoute from './gig/gig';
 import ReviewRoute from './review/review';
 import OrderRoute from './order/order';
+import ConversationRoute from './conversation/conversation';
 
 import SwaggerRoute from './swaggerDoc/router';
 
@@ -12,6 +13,7 @@ new UserRoute(router);
 new GigRoute(router);
 new ReviewRoute(router);
 new OrderRoute(router);
+new ConversationRoute(router);
 
 new SwaggerRoute(router);
 export default router;

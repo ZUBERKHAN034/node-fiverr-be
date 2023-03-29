@@ -2,6 +2,7 @@ import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getU
 import { createGig, deleteGig, getGig, getGigs } from './gig';
 import { createReview, deleteReview, getReviewsByGigId } from './review';
 import { createOrder, getOrders } from './order';
+import { createConversation, getConversations, updateConversation } from './conversation';
 
 const paths = {
   // USER
@@ -52,6 +53,16 @@ const paths = {
   },
   '/orders': {
     get: getOrders,
+  },
+  // CONVERSATION
+  '/conversation': {
+    post: createConversation,
+  },
+  '/conversations': {
+    get: getConversations,
+  },
+  '/conversation-read': {
+    post: updateConversation,
   },
 };
 

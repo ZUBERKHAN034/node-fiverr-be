@@ -54,11 +54,9 @@ export default class UserService extends Base {
   public async login(params: UserDetails): Promise<ServiceReturnVal<any>> {
     const returnVal: ServiceReturnVal<any> = {};
     try {
+      const usernameOrEmail = params.username.toLowerCase();
       const user = await this.userRepo.findOne({
-        $or: [
-          { username: { $regex: params.username, $options: 'i' } },
-          { email: { $regex: params.username, $options: 'i' } },
-        ],
+        $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
       });
       // If user exists
       if (!utility.isEmpty(user)) {
