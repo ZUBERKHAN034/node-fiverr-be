@@ -88,6 +88,7 @@ const constants = {
   ERROR_MESSAGES: {
     NOT_AUTHORIZED: 'You are not authorized',
     USER_NOT_FOUND: 'User not found.',
+    CONVERSATION_NOT_FOUND: 'Conversation not found.',
     GIG_NOT_FOUND: 'Gig not found.',
     REVIEW_NOT_FOUND: 'Review not found.',
     FILE_NOT_FOUND: 'File not found.',

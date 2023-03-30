@@ -2,10 +2,17 @@ import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getU
 import { createGig, deleteGig, getGig, getGigs } from './gig';
 import { createReview, deleteReview, getReviewsByGigId } from './review';
 import { createOrder, getOrders } from './order';
-import { createConversation, getConversations, updateConversation } from './conversation';
+import { createMessage, getMessagesByConversationId } from './message';
+import {
+  createConversation,
+  getConversationBySellerIdAndBuyerId,
+  getConversations,
+  getReceiverByConversationId,
+  updateConversation,
+} from './conversation';
 
 const paths = {
-  // USER
+  // USERS
   '/services/register': {
     post: registerUser,
   },
@@ -24,7 +31,7 @@ const paths = {
   '/services/user/{id}': {
     get: getUser,
   },
-  // GIG
+  // GIGS
   '/gig': {
     post: createGig,
   },
@@ -37,7 +44,7 @@ const paths = {
   '/services/gigs': {
     post: getGigs,
   },
-  // REVIEW
+  // REVIEWS
   '/review': {
     post: createReview,
   },
@@ -47,14 +54,14 @@ const paths = {
   '/services/reviews/{id}': {
     get: getReviewsByGigId,
   },
-  // ORDER
+  // ORDERS
   '/order': {
     post: createOrder,
   },
   '/orders': {
     get: getOrders,
   },
-  // CONVERSATION
+  // CONVERSATIONS
   '/conversation': {
     post: createConversation,
   },
@@ -63,6 +70,19 @@ const paths = {
   },
   '/conversation-read': {
     post: updateConversation,
+  },
+  '/conversation/{sellerId}/{buyerId}': {
+    get: getConversationBySellerIdAndBuyerId,
+  },
+  '/conversation-receiver/{id}': {
+    get: getReceiverByConversationId,
+  },
+  // MESSAGES
+  '/message': {
+    post: createMessage,
+  },
+  '/messages/{id}': {
+    get: getMessagesByConversationId,
   },
 };
 
