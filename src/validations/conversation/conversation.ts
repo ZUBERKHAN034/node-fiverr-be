@@ -9,4 +9,12 @@ export default class Conversation extends Base {
 
     return Joi.object(schema);
   }
+  public getConversationVS(): ObjectSchema {
+    const schema: PartialSchemaMap = {
+      sellerId: this.isObjectId(true),
+      buyerId: this.isObjectId(true),
+    };
+
+    return Joi.object(schema);
+  }
 }

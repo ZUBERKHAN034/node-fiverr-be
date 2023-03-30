@@ -41,4 +41,29 @@ export default class ConversationController {
       this.resp.resp(response).error(RespError.validation(result.error.message));
     }
   }
+
+  public async conversation(request: WRRequest<undefined, undefined, ConversationDetails>, response: Response) {
+    const params = request.params;
+    const valSchema = new Conversation().getConversationVS();
+    const result = valSchema.validate(params);
+    if (result.error == null) {
+      const resp = await this.service.conversation(params);
+      this.resp.resp(response).send(resp);
+    } else {
+      this.resp.resp(response).error(RespError.validation(result.error.message));
+    }
+  }
+
+  public async receiver(request: WRRequest<undefined, undefined, ParamsID>, response: Response) {
+    const params = request.params;
+    const valSchema = new Conversation().getIdVS();
+    const result = valSchema.validate(params);
+    const currentUser = request.currentUser;
+    if (result.error == null) {
+      const resp = await this.service.receiver(params, currentUser);
+      this.resp.resp(response).send(resp);
+    } else {
+      this.resp.resp(response).error(RespError.validation(result.error.message));
+    }
+  }
 }
