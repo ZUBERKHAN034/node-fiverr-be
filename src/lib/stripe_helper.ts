@@ -131,8 +131,8 @@ class StripeHelper {
       const amountToCharge = params.price * 100;
 
       if (!utility.isEmpty(params.productId)) {
-        SUCCESS_URL = `/gig/${params.productId}/success`;
-        CANCEL_URL = `/gig/${params.productId}/failure`;
+        SUCCESS_URL = `/gig/${params.productId}`;
+        CANCEL_URL = `/gig/${params.productId}`;
       }
 
       const sessionParams: Stripe.Checkout.SessionCreateParams = {
@@ -154,8 +154,8 @@ class StripeHelper {
           },
         ],
         customer_email: params.email,
-        success_url: `${DOMAIN_URL}${SUCCESS_URL}?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${DOMAIN_URL}${CANCEL_URL}`,
+        success_url: `${DOMAIN_URL}${SUCCESS_URL}?success=true`,
+        cancel_url: `${DOMAIN_URL}${CANCEL_URL}?canceled=true`,
       };
 
       if (!utility.isEmpty(metadata)) {
