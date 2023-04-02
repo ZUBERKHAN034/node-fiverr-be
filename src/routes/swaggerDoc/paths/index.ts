@@ -1,7 +1,7 @@
 import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser } from './user';
 import { createGig, deleteGig, getGig, getGigs } from './gig';
 import { createReview, deleteReview, getReviewsByGigId } from './review';
-import { createOrder, getOrders } from './order';
+import { checkoutOrder, getOrders } from './order';
 import { createMessage, getMessagesByConversationId } from './message';
 import {
   createConversation,
@@ -55,8 +55,8 @@ const paths = {
     get: getReviewsByGigId,
   },
   // ORDERS
-  '/order': {
-    post: createOrder,
+  '/order/checkout': {
+    post: checkoutOrder,
   },
   '/orders': {
     get: getOrders,

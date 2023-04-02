@@ -1,5 +1,6 @@
 import Stripe from 'stripe';
 import utility from './utility';
+import constants from '../common/constants';
 class StripeHelper {
   private stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
     apiVersion: '2022-11-15',
@@ -113,27 +114,50 @@ class StripeHelper {
   public async createCheckoutSession(
     mode: Stripe.Checkout.SessionCreateParams.Mode,
     params: {
-      customerId: string;
-      price: string;
+      productId: string;
+      productName: string;
+      productDescription: string;
+      productImage: string;
+      email: string;
+      price: number;
     },
-    metadata?: { productId?: string; subscriptionId?: string }
-  ): Promise<Object> {
+    metadata?: { productId?: string; subscriptionId?: string; orderId?: string }
+  ): Promise<string> {
     try {
-      const SUCCESS_URL = 'services/plan/success';
+      const DOMAIN_URL = process.env.FE_BASE_URL || constants.ENUMS.FE_BASE_URL;
+      let SUCCESS_URL = `/success`;
+      let CANCEL_URL = `/failure`;
+
+      const amountToCharge = params.price * 100;
+
+      if (!utility.isEmpty(params.productId)) {
+        SUCCESS_URL = `/gig/${params.productId}/success`;
+        CANCEL_URL = `/gig/${params.productId}/failure`;
+      }
+
       const sessionParams: Stripe.Checkout.SessionCreateParams = {
         mode: mode,
         metadata: {},
         payment_method_types: ['card'],
-        customer: params.customerId,
         line_items: [
           {
-            price: params.price,
+            price_data: {
+              unit_amount: amountToCharge,
+              currency: 'inr',
+              product_data: {
+                name: params.productName,
+                description: params.productDescription,
+                images: [params.productImage],
+              },
+            },
             quantity: 1,
           },
         ],
-        success_url: `${process.env.BASE_URL}${SUCCESS_URL}?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.BASE_URL}`,
+        customer_email: params.email,
+        success_url: `${DOMAIN_URL}${SUCCESS_URL}?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${DOMAIN_URL}${CANCEL_URL}`,
       };
+
       if (!utility.isEmpty(metadata)) {
         if (!utility.isEmpty(metadata.productId)) {
           sessionParams.metadata.productId = metadata.productId;
@@ -141,9 +165,13 @@ class StripeHelper {
         if (!utility.isEmpty(metadata.subscriptionId)) {
           sessionParams.metadata.subscriptionId = metadata.subscriptionId;
         }
+        if (!utility.isEmpty(metadata.orderId)) {
+          sessionParams.metadata.orderId = metadata.orderId;
+        }
       }
-      const session = await this.stripe.checkout.sessions.create(sessionParams);
-      return session.url;
+
+      const { url } = await this.stripe.checkout.sessions.create(sessionParams);
+      return url;
     } catch (error) {
       throw new Error(error);
     }

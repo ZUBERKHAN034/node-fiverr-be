@@ -4,7 +4,7 @@ const security = [
   },
 ];
 
-const createOrder = {
+const checkoutOrder = {
   tags: ['Orders'],
   description: 'Create Order',
   operationId: 'createOrder',
@@ -68,4 +68,4 @@ const getOrders = {
   },
 };
 
-export { createOrder, getOrders, security };
+export { checkoutOrder, getOrders, security };

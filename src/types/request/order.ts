@@ -10,3 +10,7 @@ export interface OrderDetails extends ParamsID {
   isCompleted?: string;
   paymentIntent?: string;
 }
+
+export interface StripeSignature {
+  signature: string;
+}

@@ -8,7 +8,7 @@ export interface IOrder extends Document {
   sellerId: Types.ObjectId;
   buyerId: Types.ObjectId;
   isCompleted?: boolean;
-  paymentIntent: string;
+  paymentUrl?: string;
   createdAt?: number;
   updatedAt?: number;
 }
@@ -52,9 +52,8 @@ const OrderSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    paymentIntent: {
+    paymentUrl: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
