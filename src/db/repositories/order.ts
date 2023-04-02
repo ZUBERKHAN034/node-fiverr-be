@@ -46,7 +46,7 @@ export default class OrderRepository extends BaseRepository<IOrder> {
 
     // Sort stage to sort documents based on the specified field and order
     const sort = {};
-    sort['updatedAt'] = -1;
+    sort['createdAt'] = -1;
 
     pipeline.push({ $sort: sort });
 

@@ -1,6 +1,6 @@
 import { ParamsID, TokenUser } from '../types/request/base';
 import { ReviewDetails } from '../types/request/review';
-import { GigRepository, ReviewRepository } from '../db/repositories';
+import { GigRepository, OrderRepository, ReviewRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
 import { RespError } from '../lib/wr_response';
 import { IReview } from '../db/models/review';
@@ -8,6 +8,7 @@ import { IGig } from '../db/models/gig';
 import Base from './base';
 import utility from '../lib/utility';
 import constants from '../common/constants';
+import { IOrder } from '../db/models/order';
 
 export default class ReviewService extends Base {
   private reviewRepo = new ReviewRepository();
@@ -22,21 +23,31 @@ export default class ReviewService extends Base {
   public async create(params: ReviewDetails, user: TokenUser): Promise<ServiceReturnVal<IReview>> {
     const returnVal: ServiceReturnVal<IReview> = {};
     try {
+      const orderRepo = new OrderRepository();
       const gigRepo = new GigRepository();
       // If user is a seller then not allowed to add review
       if (user.isSeller === false) {
         const review: IReview = await this.reviewRepo.findReview(params.gigId, user._id);
         if (utility.isEmpty(review)) {
-          const reviewParams = {
-            userId: this.reviewRepo.toObjectId(user._id),
-            gigId: this.reviewRepo.toObjectId(params.gigId),
-            desc: params.desc,
-            star: parseInt(params.star),
-          } as IReview;
+          const orderParams = {
+            gigId: orderRepo.toObjectId(params.gigId),
+            isCompleted: true,
+          } as IOrder;
+          const isOrdered = await orderRepo.findOne(orderParams);
+          if (!utility.isEmpty(isOrdered)) {
+            const reviewParams = {
+              userId: this.reviewRepo.toObjectId(user._id),
+              gigId: this.reviewRepo.toObjectId(params.gigId),
+              desc: params.desc,
+              star: parseInt(params.star),
+            } as IReview;
 
-          const gigParams = { $inc: { totalStars: reviewParams.star, starNumber: 1 } } as unknown as IGig;
-          await gigRepo.update(reviewParams.gigId, gigParams);
-          returnVal.data = await this.reviewRepo.create(reviewParams);
+            const gigParams = { $inc: { totalStars: reviewParams.star, starNumber: 1 } } as unknown as IGig;
+            await gigRepo.update(reviewParams.gigId, gigParams);
+            returnVal.data = await this.reviewRepo.create(reviewParams);
+          } else {
+            returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_403, constants.ERROR_MESSAGES.NOT_AUTHORIZED);
+          }
         } else {
           returnVal.error = new RespError(
             constants.RESP_ERR_CODES.ERR_409,
