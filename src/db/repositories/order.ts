@@ -44,6 +44,12 @@ export default class OrderRepository extends BaseRepository<IOrder> {
 
     pipeline.push(project);
 
+    // Sort stage to sort documents based on the specified field and order
+    const sort = {};
+    sort['updatedAt'] = -1;
+
+    pipeline.push({ $sort: sort });
+
     // Unwind stage to flatten the userDetails array
     const unwind = {
       $unwind: {

@@ -30,7 +30,7 @@ export default class ConversationRepository extends BaseRepository<IConversation
 
     pipeline.push(lookup);
 
-    // Project stage to exclude fields and combine the userDetails object with order object
+    // Project stage to exclude fields and combine the userDetails object with conversation object
     const project = {
       $project: {
         __v: 0,
@@ -44,7 +44,7 @@ export default class ConversationRepository extends BaseRepository<IConversation
 
     pipeline.push(project);
 
-    // Sort stage to sort documents based on the specified field and order
+    // Sort stage to sort documents based on the specified field and conversation
     const sort = {};
     sort['updatedAt'] = -1;
 
