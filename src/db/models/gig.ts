@@ -83,7 +83,7 @@ const GigSchema = new Schema(
     },
     features: {
       type: [String],
-      required: [true, 'One feature is required'],
+      required: [true, '1 feature is required'],
       default: [],
     },
     sales: {

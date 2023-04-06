@@ -64,4 +64,12 @@ export default class OrderRepository extends BaseRepository<IOrder> {
 
     return results as IOrder[];
   }
+
+  async removeUncompletedOrders<IOrder>(params: TokenUser): Promise<IOrder | null> {
+    const match = params.isSeller
+      ? { sellerId: this.toObjectId(params._id), isCompleted: false }
+      : { buyerId: this.toObjectId(params._id), isCompleted: false };
+
+    return (await this._model.deleteMany(match)) as IOrder;
+  }
 }

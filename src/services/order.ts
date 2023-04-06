@@ -45,6 +45,8 @@ export default class OrderService extends Base {
         const gig: IGig = await gigRepo.findById(params.gigId);
 
         if (!utility.isEmpty(gig)) {
+          await this.orderRepo.removeUncompletedOrders(user);
+
           const orderParams = {
             gigId: gig._id,
             img: gig.cover,
