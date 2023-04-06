@@ -58,7 +58,10 @@ export default class Base {
   }
 
   protected isStringArray(isRequired: boolean): AnySchema {
-    let schema = Joi.array().items(Joi.string().trim().required());
+    let schema = isRequired
+      ? Joi.array().items(Joi.string().trim().required())
+      : Joi.array().items(Joi.string().trim());
+
     if (isRequired) {
       schema = schema.required();
     }

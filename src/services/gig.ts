@@ -32,7 +32,7 @@ export default class GigService extends Base {
           cat: params.cat,
           price: params.price,
           cover: params.cover,
-          images: params.images ? params.images : [params.cover],
+          images: params.images ? [params.cover, ...params.images] : [params.cover],
           shortTitle: params.shortTitle,
           shortDesc: params.shortDesc,
           deliveryTime: params.deliveryTime,

@@ -23,7 +23,7 @@ const paths = {
     post: uploadUserAssets,
   },
   '/user': {
-    delete: deleteUser,
+    post: deleteUser,
   },
   '/user/logout': {
     post: logoutUser,
@@ -36,7 +36,7 @@ const paths = {
     post: createGig,
   },
   '/gig/{id}': {
-    delete: deleteGig,
+    post: deleteGig,
   },
   '/services/gig/{id}': {
     get: getGig,
@@ -49,7 +49,7 @@ const paths = {
     post: createReview,
   },
   '/review/{id}': {
-    delete: deleteReview,
+    post: deleteReview,
   },
   '/services/reviews/{id}': {
     get: getReviewsByGigId,
