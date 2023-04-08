@@ -59,4 +59,10 @@ export default class GigController {
       this.resp.resp(response).error(RespError.validation(result.error.message));
     }
   }
+
+  public async myGigs(request: WRRequest<undefined, undefined, undefined>, response: Response) {
+    const currentUser = request.currentUser;
+    const resp = await this.service.myGigs(currentUser);
+    this.resp.resp(response).send(resp);
+  }
 }

@@ -1,5 +1,5 @@
 import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser } from './user';
-import { createGig, deleteGig, getGig, getGigs } from './gig';
+import { createGig, deleteGig, getGig, getGigs, getMyGigs } from './gig';
 import { createReview, deleteReview, getReviewsByGigId } from './review';
 import { checkoutOrder, getOrders } from './order';
 import { createMessage, getMessagesByConversationId } from './message';
@@ -43,6 +43,9 @@ const paths = {
   },
   '/services/gigs': {
     post: getGigs,
+  },
+  '/my-gigs': {
+    get: getMyGigs,
   },
   // REVIEWS
   '/review': {

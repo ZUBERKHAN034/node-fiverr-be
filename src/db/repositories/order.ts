@@ -13,10 +13,10 @@ export default class OrderRepository extends BaseRepository<IOrder> {
 
     // Match stage to filter documents
     const match = params.isSeller
-      ? { sellerId: this.toObjectId(params._id), isCompleted: true }
-      : { buyerId: this.toObjectId(params._id), isCompleted: true };
+      ? { sellerId: this.toObjectId(params._id) }
+      : { buyerId: this.toObjectId(params._id) };
 
-    pipeline.push({ $match: match });
+    pipeline.push({ $match: { isCompleted: true, ...match } });
 
     // Lookup stage to fetch user details and combine with order object
     const lookup = {
@@ -65,11 +65,8 @@ export default class OrderRepository extends BaseRepository<IOrder> {
     return results as IOrder[];
   }
 
-  async removeUncompletedOrders<IOrder>(params: TokenUser): Promise<IOrder | null> {
-    const match = params.isSeller
-      ? { sellerId: this.toObjectId(params._id), isCompleted: false }
-      : { buyerId: this.toObjectId(params._id), isCompleted: false };
-
-    return (await this._model.deleteMany(match)) as IOrder;
+  async removeUncompletedOrders(params: TokenUser): Promise<void> {
+    const match = { buyerId: this.toObjectId(params._id), isCompleted: false };
+    await this._model.deleteMany(match);
   }
 }

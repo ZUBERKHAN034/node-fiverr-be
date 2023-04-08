@@ -117,4 +117,27 @@ export default class GigService extends Base {
     }
     return returnVal;
   }
+
+  /**
+   * Function for getting my-gigs for seller
+   *
+   * @param {TokenUser}
+   * @returns {ServiceReturnVal}
+   */
+  public async myGigs(user: TokenUser): Promise<ServiceReturnVal<Array<IGig>>> {
+    const returnVal: ServiceReturnVal<Array<IGig>> = {};
+    try {
+      // If user is a seller
+      if (user.isSeller === true) {
+        const params = { userId: user._id, orderBy: 'createdAt' };
+        const gigs: IGig[] = await this.gigRepo.findGigs(params);
+        returnVal.data = gigs;
+      } else {
+        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_403, constants.ERROR_MESSAGES.NOT_AUTHORIZED);
+      }
+    } catch (error) {
+      returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
+    }
+    return returnVal;
+  }
 }

@@ -15,5 +15,6 @@ export default class GigRoute {
     this.router.post('/gig/:id', this.controller.delete.bind(this.controller));
     this.router.get('/services/gig/:id', this.controller.gig.bind(this.controller));
     this.router.post('/services/gigs', this.controller.gigs.bind(this.controller));
+    this.router.get('/my-gigs', this.controller.myGigs.bind(this.controller));
   }
 }
