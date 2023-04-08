@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
 import utility from '../lib/utility';
 import Base from './base';
 import constants from '../common/constants';
+import appFunctions from '../lib/app_functions';
 
 export default class UserService extends Base {
   private userRepo = new UserRepository();
@@ -29,7 +30,7 @@ export default class UserService extends Base {
           email: params.email,
           password: params.password,
           country: params.country,
-          img: params.img,
+          img: params.img == undefined ? await appFunctions.generateAvatars(params.username) : params.img,
           desc: params.desc,
           phone: params.phone,
           isSeller: params.isSeller == 'true' ? true : false,

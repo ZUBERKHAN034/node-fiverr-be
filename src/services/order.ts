@@ -84,15 +84,14 @@ export default class OrderService extends Base {
   /**
    * Function to listen stripe webhook events
    *
-   * @param {PlanDetails}
+   * @param {RequestParams}
+   * @param {StripeSignature}
    * @returns {ServiceReturnVal}
    */
-  public async eventsByWebhook(
-    params: RequestParams,
-    paramsStripe: StripeSignature
-  ): Promise<ServiceReturnVal<Object>> {
-    const returnVal: ServiceReturnVal<Object> = {};
+  public async eventsByWebhook(params: RequestParams, paramsStripe: StripeSignature): Promise<ServiceReturnVal<never>> {
+    const returnVal: ServiceReturnVal<never> = {};
     try {
+      const gigRepo = new GigRepository();
       const signature = paramsStripe.signature;
       const event = await stripe.createWebhook(params, signature);
       switch (event.type) {
@@ -100,6 +99,8 @@ export default class OrderService extends Base {
           if (event.data.mode === 'payment' && event.data.payment_status === 'paid') {
             const orderId = event.data.metadata.orderId;
             const order = await this.orderRepo.findById(orderId);
+            const gigUpdateParams = { $inc: { sales: 1 }, lastDelivery: new Date() } as unknown as IGig;
+            await gigRepo.update(order.gigId, gigUpdateParams);
             order.isCompleted = true;
             await order.save();
           }

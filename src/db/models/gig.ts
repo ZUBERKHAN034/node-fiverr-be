@@ -16,6 +16,7 @@ export interface IGig extends Document {
   revisionNumber: number;
   features: string[];
   sales?: number;
+  lastDelivery?: Date;
   createdAt?: number;
   updatedAt?: number;
 }
@@ -89,6 +90,10 @@ const GigSchema = new Schema(
     sales: {
       type: Number,
       default: 0,
+    },
+    lastDelivery: {
+      type: Date,
+      default: null,
     },
   },
   { timestamps: true }

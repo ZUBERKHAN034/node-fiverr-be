@@ -11,12 +11,15 @@ class Utility {
   public pagination(page: number, limit: number): Pagination {
     return { offset: (page - 1) * limit, limit: limit };
   }
+
   public hash(noOfBytes: number) {
     return crypto.randomBytes(noOfBytes).toString('hex');
   }
+
   public generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
+
   public async mediaDownload(url: string, path: string): Promise<any> {
     return new Promise<any>(async (resolve, reject) => {
       http.get(url.replace('https', 'http'), (response) => {

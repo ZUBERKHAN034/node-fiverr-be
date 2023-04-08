@@ -20,10 +20,7 @@ class StripeHelper {
     }
   }
 
-  public async getCustomers(
-    params?: Stripe.CustomerListParams,
-    options?: Stripe.RequestOptions
-  ): Promise<Object | null> {
+  public async getCustomers(params?: Stripe.CustomerListParams, options?: Stripe.RequestOptions): Promise<any | null> {
     try {
       const customers = await this.stripe.customers.list(params, options);
       return customers.data;
@@ -32,7 +29,7 @@ class StripeHelper {
     }
   }
 
-  public async customerByEmail(email: string): Promise<Object | null> {
+  public async customerByEmail(email: string): Promise<any | null> {
     try {
       const paramsCustomer: Stripe.CustomerListParams = {
         email: email,
@@ -45,7 +42,7 @@ class StripeHelper {
     }
   }
 
-  public async customerById(id: string): Promise<Object | null> {
+  public async customerById(id: string): Promise<any | null> {
     try {
       return await this.stripe.customers.retrieve(id);
     } catch (error) {
@@ -58,7 +55,7 @@ class StripeHelper {
     expMonth: string;
     expYear: string;
     cvc: string;
-  }): Promise<Object> {
+  }): Promise<any> {
     try {
       const paramsCardToken: Stripe.TokenCreateParams = {
         card: {
@@ -74,7 +71,7 @@ class StripeHelper {
     }
   }
 
-  public async addCardToCustomer(id: string, cardToken: string): Promise<Object> {
+  public async addCardToCustomer(id: string, cardToken: string): Promise<any> {
     try {
       const paramsCardSource: Stripe.CustomerSourceCreateParams = {
         source: cardToken,
@@ -91,7 +88,7 @@ class StripeHelper {
     currency: string;
     amount: number;
     description?: string;
-  }): Promise<Object> {
+  }): Promise<any> {
     try {
       const paramsCharge: Stripe.PaymentIntentCreateParams = {
         customer: params.id,
@@ -177,7 +174,7 @@ class StripeHelper {
     }
   }
 
-  public async checkoutSessionById(sessionId: string): Promise<Object | null> {
+  public async checkoutSessionById(sessionId: string): Promise<any | null> {
     try {
       return await this.stripe.checkout.sessions.retrieve(sessionId);
     } catch (error) {
@@ -207,7 +204,7 @@ class StripeHelper {
     }
   }
 
-  public async delSubscription(subscriptionId: string): Promise<any> {
+  public async delSubscription(subscriptionId: string): Promise<void> {
     try {
       await this.stripe.subscriptions.del(subscriptionId);
     } catch (error) {
@@ -221,7 +218,7 @@ class StripeHelper {
     currency: string;
     recurring: boolean;
     interval?: string;
-  }): Promise<Object> {
+  }): Promise<string> {
     try {
       const product = await this.stripe.products.create({
         name: params.name,

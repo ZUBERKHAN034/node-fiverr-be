@@ -237,4 +237,27 @@ const getGigs = {
   },
 };
 
-export { createGig, deleteGig, getGig, getGigs, security };
+const getMyGigs = {
+  tags: ['Gigs'],
+  description: 'Get My Gigs for sellers',
+  operationId: 'getMyGigs',
+  security: [
+    {
+      cookieAuth: [],
+    },
+  ],
+
+  responses: {
+    '200': {
+      description: 'Returns Array of Gigs Details or Empty Array.',
+    },
+    '401': {
+      description: 'You are unauthenticated',
+    },
+    '500': {
+      description: 'Internal server error',
+    },
+  },
+};
+
+export { createGig, deleteGig, getGig, getGigs, getMyGigs, security };

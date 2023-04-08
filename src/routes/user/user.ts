@@ -13,6 +13,7 @@ export default class UserRoute {
   private upload = multer({
     storage: multerS3({
       s3: s3Helper.s3Client(),
+      contentType: multerS3.AUTO_CONTENT_TYPE,
       bucket: constants.AWS.BUCKET_TYPE.PUBLIC,
       acl: constants.AWS.ACL_TYPE.PUBLIC,
       key: (_request, file, cb) => {
