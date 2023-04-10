@@ -90,6 +90,8 @@ const constants = {
     USER_NOT_FOUND: 'User not found.',
     CONVERSATION_NOT_FOUND: 'Conversation not found.',
     GIG_NOT_FOUND: 'Gig not found.',
+    FAV_NOT_FOUND: 'Favorite not found.',
+    FAV_ALREADY_EXISTS: 'Favorite already exists',
     REVIEW_NOT_FOUND: 'Review not found.',
     FILE_NOT_FOUND: 'File not found.',
     USER_ALREADY_EXISTS: 'User already exists',

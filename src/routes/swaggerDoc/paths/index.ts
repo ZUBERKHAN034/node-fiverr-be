@@ -10,6 +10,7 @@ import {
   getReceiverByConversationId,
   updateConversation,
 } from './conversation';
+import { createFavorite, deleteFavoriteByGigId, getFavorites } from './favorite';
 
 const paths = {
   // USERS
@@ -86,6 +87,16 @@ const paths = {
   },
   '/messages/{id}': {
     get: getMessagesByConversationId,
+  },
+  // FAVORITES
+  '/favorite': {
+    post: createFavorite,
+  },
+  '/favorite/{id}': {
+    post: deleteFavoriteByGigId,
+  },
+  '/favorites': {
+    get: getFavorites,
   },
 };
 

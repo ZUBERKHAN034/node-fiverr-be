@@ -1,11 +1,10 @@
 import { Response } from 'express';
 import { OrderDetails, StripeSignature } from '../types/request/order';
-// import { ParamsID } from '../types/request/base';
+import { RequestParams } from '../types/common';
 import { RespError, WRResponse } from '../lib/wr_response';
 import OrderService from '../services/order';
 import Order from '../validations/order/order';
 import WRRequest from '../lib/wr_request';
-import { RequestParams } from '../types/common';
 
 export default class OrderController {
   private service = new OrderService();

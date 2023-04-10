@@ -30,16 +30,14 @@ export default class UserController {
     if (result.error == null) {
       const resp = await this.service.login(params);
       if (resp.data?.token) {
-        const token = resp.data.token;
-        const HTTPS = {
-          sameSite: 'none',
-          httpOnly: true,
-          secure: true,
-        };
-        const HTTP = {
-          httpOnly: true,
-        };
-        const cookieParams = process.env.FE_BASE_URL ? HTTPS : HTTP;
+        const { token } = resp.data;
+        const oneMonth = 30 * 24 * 60 * 60 * 1000;
+        const expireIn = new Date(Date.now() + oneMonth);
+        const cookieParams = { expires: expireIn, httpOnly: true };
+        if (process.env.FE_BASE_URL) {
+          cookieParams['sameSite'] = 'none';
+          cookieParams['secure'] = true;
+        }
         response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, token, cookieParams);
       }
       this.resp.resp(response).send(resp);
