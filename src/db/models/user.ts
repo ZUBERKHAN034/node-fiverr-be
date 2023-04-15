@@ -10,6 +10,7 @@ export interface IUser extends Document {
   phone: string;
   desc: string;
   isSeller: boolean;
+  gender: string;
   createdAt?: number;
   updatedAt?: number;
 }
@@ -47,8 +48,7 @@ const UserSchema = new Schema(
     },
     img: {
       type: String,
-      default:
-        'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg',
+      default: 'https://i.pinimg.com/736x/44/e3/3c/44e33cb6bed2890551b9c594e896fff3.jpg',
     },
     phone: {
       match: phoneMatch,
@@ -60,6 +60,11 @@ const UserSchema = new Schema(
     isSeller: {
       type: Boolean,
       default: false,
+    },
+    gender: {
+      type: String,
+      enum: ['male', 'female'],
+      required: true,
     },
   },
   { timestamps: true }

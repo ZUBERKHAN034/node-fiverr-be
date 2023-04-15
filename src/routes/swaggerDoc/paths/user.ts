@@ -55,6 +55,12 @@ const registerUser = {
               example: ['true', 'false'],
               required: false,
             },
+            gender: {
+              type: 'string',
+              enum: ['male', 'female'],
+              default: 'male',
+              required: true,
+            },
           },
         },
       },

@@ -41,15 +41,17 @@ class AppFunctions {
     }
   }
 
-  public async generateAvatars(name: string): Promise<string> {
-    const url = `https://api.dicebear.com/6.x/micah/svg?seed=${name}&facialHair[]&facialHairColor=transparent&hair=dannyPhantom,fonze,full,pixie,turban&mouth=laughing,nervous,pucker,sad,smile,smirk,surprised&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
-
+  public async generateAvatars(name: string, gender = 'male'): Promise<string> {
+    const uniqueName = `${name}-${Date.now()}`;
+    const male = `https://api.dicebear.com/6.x/avataaars/svg?seed=${uniqueName}&accessories=kurt,prescription01,prescription02,round,sunglasses,wayfarers&accessoriesProbability=30&clothing=blazerAndShirt,collarAndSweater,hoodie,shirtCrewNeck,shirtVNeck,graphicShirt,blazerAndSweater&eyebrows=angryNatural,default,defaultNatural,flatNatural,frownNatural,raisedExcited,raisedExcitedNatural,sadConcerned,sadConcernedNatural,upDown,upDownNatural,angry&facialHairColor=2c1b18,4a312c,transparent&hairColor=2c1b18,4a312c,724133,a55728,b58143,c93305,d6b370,f59797,ecdcbf,e8e1e1,transparent&skinColor=614335,d08b5b,edb98a,ffdbb4,ae5d29,f8d25c,fd9841&top=dreads01,dreads02,frizzle,hat,shaggy,shortCurly,shortFlat,shortRound,shortWaved,theCaesar,theCaesarAndSidePart,turban,winterHat02,winterHat03,winterHat04,winterHat1&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf,ff6d60,1dbf73,a020f0`;
+    const female = `https://api.dicebear.com/6.x/avataaars/svg?seed=${uniqueName}&facialHairProbability=0&top%5B%5D=bigHair,bob,bun,curly,curvy,dreads,frida,fro,hijab,longButNotTooLong,miaWallace,shaggy,shaggyMullet,shavedSides,straightAndStrand,straight01,straight02&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf,ff6d60,1dbf73,a020f0`;
+    const url = gender === 'male' ? male : female;
     const { data: svgBuffer } = await axios.get(url, { responseType: 'arraybuffer', responseEncoding: 'binary' });
     const pngBuffer = await this.svgToPng(svgBuffer, { height: 512, width: 512 });
 
     const avatarUrl = await s3Helper.uploadToS3(
       pngBuffer,
-      `${constants.AWS.ASSET_FOLDER.PUBLIC.USER}/${name}-${Date.now()}${constants.ENUMS.FILE_FORMAT.PNG}`
+      `${constants.AWS.ASSET_FOLDER.PUBLIC.USER}/${uniqueName}${constants.ENUMS.FILE_FORMAT.PNG}`
     );
 
     return avatarUrl;
