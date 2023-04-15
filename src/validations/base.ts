@@ -27,6 +27,14 @@ export default class Base {
     return schema;
   }
 
+  protected isGender(isRequired: boolean): AnySchema {
+    let schema = Joi.string().trim().valid('male', 'female');
+    if (isRequired) {
+      schema = schema.required();
+    }
+    return schema;
+  }
+
   protected isStringAlpha(isRequired: boolean): AnySchema {
     let schema = Joi.string().trim().alphanum();
     if (isRequired) {

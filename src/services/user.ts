@@ -30,10 +30,12 @@ export default class UserService extends Base {
           email: params.email,
           password: params.password,
           country: params.country,
-          img: params.img == undefined ? await appFunctions.generateAvatars(params.username) : params.img,
+          img:
+            params.img == undefined ? await appFunctions.generateAvatars(params.username, params.gender) : params.img,
           desc: params.desc,
           phone: params.phone,
           isSeller: params.isSeller == 'true' ? true : false,
+          gender: params.gender,
         } as IUser;
         await this.userRepo.create(usr);
         returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;

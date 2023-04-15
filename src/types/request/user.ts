@@ -9,4 +9,5 @@ export interface UserDetails extends ParamsID {
   phone?: string;
   desc?: string;
   isSeller?: string;
+  gender?: string;
 }

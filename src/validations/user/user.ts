@@ -8,6 +8,7 @@ export default class User extends Base {
       email: this.email(true),
       password: this.isString(true),
       country: this.isString(true),
+      gender: this.isGender(true),
       img: this.isString(false),
       desc: this.isString(false),
       phone: this.isString(false),
