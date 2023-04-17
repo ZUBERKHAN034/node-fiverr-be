@@ -4,7 +4,7 @@ export default class Base {
   protected isObjectId(isRequired: boolean): AnySchema {
     let schema = Joi.string()
       .regex(/^[0-9a-fA-F]{24}$/)
-      .message(`Id is not valid!`);
+      .message(`"id" is not valid!`);
     if (isRequired) {
       schema = schema.required();
     }
@@ -49,8 +49,17 @@ export default class Base {
     }
     return schema;
   }
-  protected email(isRequired: boolean): AnySchema {
+  protected isEmail(isRequired: boolean): AnySchema {
     let schema = Joi.string().trim().email();
+    if (isRequired) {
+      schema = schema.required();
+    }
+    return schema;
+  }
+  protected isPhone(isRequired: boolean): AnySchema {
+    let schema = Joi.string()
+      .regex(/^.*(?<=\s)\d{10}$/)
+      .message(`"phone" number is not valid!`);
     if (isRequired) {
       schema = schema.required();
     }
