@@ -25,4 +25,14 @@ export default class User extends Base {
     };
     return Joi.object(schema);
   }
+
+  public getSetupAcctProfileVs(): ObjectSchema {
+    const schema: PartialSchemaMap = {
+      img: this.isString(false),
+      desc: this.isString(true),
+      phone: this.isString(true),
+    };
+
+    return Joi.object(schema);
+  }
 }

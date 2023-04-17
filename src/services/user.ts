@@ -1,4 +1,4 @@
-import type { UserDetails } from '../types/request/user';
+import type { SetupAcctProfile, UserDetails } from '../types/request/user';
 import { ParamsID, TokenUser, UploadFile } from '../types/request/base';
 import { UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
@@ -26,8 +26,8 @@ export default class UserService extends Base {
       const isUser = await this.userRepo.userByEmail(params.email);
       if (utility.isEmpty(isUser)) {
         const usr = {
-          username: params.username,
-          email: params.email,
+          username: params.username.toLowerCase(),
+          email: params.email.toLowerCase(),
           password: params.password,
           country: params.country,
           img:
@@ -171,6 +171,33 @@ export default class UserService extends Base {
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.USER_NOT_FOUND);
       }
+    } catch (error) {
+      returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
+    }
+    return returnVal;
+  }
+
+  /**
+   * Function setup user profile
+   *
+   * @param {SetupAcctProfile}
+   * @returns {ServiceReturnVal}
+   */
+  public async setupAcctProfile(params: SetupAcctProfile, user: TokenUser): Promise<ServiceReturnVal<IUser>> {
+    const returnVal: ServiceReturnVal<IUser> = {};
+    try {
+      const userId = this.userRepo.toObjectId(user._id);
+
+      const setupParams = {
+        phone: params.phone,
+        desc: params.desc,
+        img: params.img,
+      } as IUser;
+
+      const usr = await this.userRepo.update(userId, setupParams);
+      usr.password = undefined;
+
+      returnVal.data = usr;
     } catch (error) {
       returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
     }

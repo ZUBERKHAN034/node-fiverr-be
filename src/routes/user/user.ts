@@ -41,5 +41,6 @@ export default class UserRoute {
     this.router.post('/user', this.controller.delete.bind(this.controller));
     this.router.post('/user/logout', this.controller.logout.bind(this.controller));
     this.router.get('/services/user/:id', this.controller.get.bind(this.controller));
+    this.router.post('/user/setup-account', this.controller.setupAcctProfile.bind(this.controller));
   }
 }
