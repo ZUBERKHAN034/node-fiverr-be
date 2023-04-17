@@ -1,3 +1,4 @@
+import { Query } from 'express-serve-static-core';
 import { ParamsID } from './base';
 
 export interface UserDetails extends ParamsID {
@@ -10,4 +11,10 @@ export interface UserDetails extends ParamsID {
   desc?: string;
   isSeller?: string;
   gender?: string;
+}
+
+export interface SetupAcctProfile extends Query {
+  img?: string;
+  phone?: string;
+  desc?: string;
 }

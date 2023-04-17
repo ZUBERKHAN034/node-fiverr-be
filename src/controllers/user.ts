@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { UserDetails } from '../types/request/user';
+import { SetupAcctProfile, UserDetails } from '../types/request/user';
 import { RespError, WRResponse } from '../lib/wr_response';
 import { ParamsID, UploadFile } from '../types/request/base';
 import UserService from '../services/user';
@@ -74,6 +74,18 @@ export default class UserController {
     const result = valSchema.validate(params);
     if (result.error == null) {
       const resp = await this.service.get(params);
+      this.resp.resp(response).send(resp);
+    } else {
+      this.resp.resp(response).error(RespError.validation(result.error.message));
+    }
+  }
+
+  public async setupAcctProfile(request: WRRequest<undefined, SetupAcctProfile, undefined>, response: Response) {
+    const params = request.body;
+    const valSchema = new User().getSetupAcctProfileVs();
+    const result = valSchema.validate(params);
+    if (result.error == null) {
+      const resp = await this.service.setupAcctProfile(params, request.currentUser);
       this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));

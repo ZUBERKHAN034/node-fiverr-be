@@ -262,4 +262,51 @@ const getUser = {
   },
 };
 
-export { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser, security };
+const getSetupAcctProfile = {
+  tags: ['Users'],
+  description: 'Setup User Account Profile',
+  operationId: 'getSetupAcctProfile',
+  security: [
+    {
+      cookieAuth: [],
+    },
+  ],
+  requestBody: {
+    content: {
+      'application/x-www-form-urlencoded': {
+        schema: {
+          type: 'object',
+          properties: {
+            img: {
+              type: 'string',
+              example:
+                'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg',
+            },
+            desc: {
+              type: 'string',
+              example: 'Developer',
+            },
+            phone: {
+              type: 'string',
+              example: '+1 234 567 89',
+            },
+          },
+        },
+      },
+    },
+    required: true,
+  },
+  responses: {
+    '200': {
+      description: 'Return Updated User  Details',
+    },
+    '401': {
+      description: 'You are unauthenticated',
+    },
+    '500': {
+      description: 'Internal server error',
+    },
+  },
+};
+
+export { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser, getSetupAcctProfile, security };

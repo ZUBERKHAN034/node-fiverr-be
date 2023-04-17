@@ -1,4 +1,12 @@
-import { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser } from './user';
+import {
+  registerUser,
+  loginUser,
+  deleteUser,
+  logoutUser,
+  uploadUserAssets,
+  getUser,
+  getSetupAcctProfile,
+} from './user';
 import { createGig, deleteGig, getGig, getGigs, getMyGigs } from './gig';
 import { createReview, deleteReview, getReviewsByGigId } from './review';
 import { checkoutOrder, getOrders } from './order';
@@ -31,6 +39,9 @@ const paths = {
   },
   '/services/user/{id}': {
     get: getUser,
+  },
+  '/user/setup-account': {
+    post: getSetupAcctProfile,
   },
   // GIGS
   '/gig': {
