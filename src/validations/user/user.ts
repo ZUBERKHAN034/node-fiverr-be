@@ -5,13 +5,13 @@ export default class User extends Base {
   public getRegisterVS(): ObjectSchema {
     const schema: PartialSchemaMap = {
       username: this.isString(true),
-      email: this.email(true),
+      email: this.isEmail(true),
       password: this.isString(true),
       country: this.isString(true),
       gender: this.isGender(true),
       img: this.isString(false),
       desc: this.isString(false),
-      phone: this.isString(false),
+      phone: this.isPhone(false),
       isSeller: this.isBoolean(false),
     };
 
@@ -30,7 +30,7 @@ export default class User extends Base {
     const schema: PartialSchemaMap = {
       img: this.isString(false),
       desc: this.isString(true),
-      phone: this.isString(true),
+      phone: this.isPhone(true),
     };
 
     return Joi.object(schema);
