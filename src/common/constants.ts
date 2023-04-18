@@ -168,9 +168,9 @@ const constants = {
     ADVANCE: 'advance',
   },
 
-  SEND_GRID: {
-    SENDER_NAME: 'fiverr',
-    SENDER_EMAIL: `no-reply@${process.env.SEND_GRID_DOMAIN}`,
+  SEND_IN_BLUE: {
+    SENDER_NAME: 'Fiverr',
+    SENDER_EMAIL: `no-reply@${process.env.SEND_IN_BLUE_DOMAIN}`,
   },
 };
 
