@@ -10,9 +10,14 @@ import utility from '../lib/utility';
 import Base from './base';
 import constants from '../common/constants';
 import appFunctions from '../lib/app_functions';
+import Emailer from '../common/emailer';
 
 export default class UserService extends Base {
   private userRepo = new UserRepository();
+  private emailer = new Emailer(process.env.SEND_IN_BLUE_API_KEY, {
+    name: constants.SEND_IN_BLUE.SENDER_NAME,
+    email: constants.SEND_IN_BLUE.SENDER_EMAIL,
+  });
 
   /**
    * Function for registration of users
@@ -24,8 +29,9 @@ export default class UserService extends Base {
     const returnVal: ServiceReturnVal<string> = {};
     try {
       const isUser = await this.userRepo.userByEmail(params.email);
+
       if (utility.isEmpty(isUser)) {
-        const usr = {
+        const userParams = {
           username: params.username.toLowerCase(),
           email: params.email.toLowerCase(),
           password: params.password,
@@ -37,7 +43,13 @@ export default class UserService extends Base {
           isSeller: params.isSeller == 'true' ? true : false,
           gender: params.gender,
         } as IUser;
-        await this.userRepo.create(usr);
+
+        const user = await this.userRepo.create(userParams);
+        const varsToReplace = { username: user.username };
+
+        const welcomeEmailHtml = this.emailer.renderEmailTemplate('welcome_email', varsToReplace, 'email-templates');
+        await this.emailer.sendEmail(user.email, `Welcome to ${constants.SEND_IN_BLUE.SENDER_NAME}`, welcomeEmailHtml);
+
         returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_409, constants.ERROR_MESSAGES.USER_ALREADY_EXISTS);
