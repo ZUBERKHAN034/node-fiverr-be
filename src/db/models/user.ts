@@ -13,6 +13,7 @@ export interface IUser extends Document {
   isSeller: boolean;
   gender: string;
   type: 'GOOGLE' | 'CUSTOM';
+  customerId: string;
   createdAt?: number;
   updatedAt?: number;
 }
@@ -73,6 +74,10 @@ const UserSchema = new Schema(
       type: String,
       enum: ['GOOGLE', 'CUSTOM'],
       default: 'CUSTOM',
+    },
+    customerId: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }

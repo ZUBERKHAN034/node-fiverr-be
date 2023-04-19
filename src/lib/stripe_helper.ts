@@ -111,11 +111,11 @@ class StripeHelper {
   public async createCheckoutSession(
     mode: Stripe.Checkout.SessionCreateParams.Mode,
     params: {
+      customerId: string;
       productId: string;
       productName: string;
       productDescription: string;
       productImage: string;
-      email: string;
       price: number;
     },
     metadata?: { productId?: string; subscriptionId?: string; orderId?: string }
@@ -133,6 +133,7 @@ class StripeHelper {
       }
 
       const sessionParams: Stripe.Checkout.SessionCreateParams = {
+        customer: params.customerId,
         mode: mode,
         metadata: {},
         payment_method_types: ['card'],
@@ -150,7 +151,6 @@ class StripeHelper {
             quantity: 1,
           },
         ],
-        customer_email: params.email,
         success_url: `${DOMAIN_URL}${SUCCESS_URL}?success=true`,
         cancel_url: `${DOMAIN_URL}${CANCEL_URL}?canceled=true`,
       };

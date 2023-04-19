@@ -58,11 +58,11 @@ export default class OrderService extends Base {
 
           const order = await this.orderRepo.create(orderParams);
           const checkoutParams = {
+            customerId: user.customerId,
             productId: gig._id.toString(),
             productName: gig.shortTitle,
             productDescription: gig.shortDesc,
             productImage: gig.cover,
-            email: user.email,
             price: gig.price,
           };
 

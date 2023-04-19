@@ -10,6 +10,7 @@ import utility from '../lib/utility';
 import Base from './base';
 import constants from '../common/constants';
 import appFunctions from '../lib/app_functions';
+import stripe from '../lib/stripe_helper';
 import Emailer from '../common/emailer';
 
 export default class UserService extends Base {
@@ -37,13 +38,18 @@ export default class UserService extends Base {
           email: params.email.toLowerCase(),
           password: params.password,
           country: params.country,
-          img:
-            params.img == undefined ? await appFunctions.generateAvatars(params.username, params.gender) : params.img,
-          desc: params.desc,
-          phone: params.phone,
+          img: await appFunctions.generateAvatars(params.username, params.gender),
           isSeller: params.isSeller == 'true' ? true : false,
           gender: params.gender,
         } as IUser;
+
+        if (params.isSeller != 'true') {
+          userParams.customerId = await stripe.createCustomer({
+            email: params.email,
+            name: params.username,
+            description: constants.ENUMS.ROLE.BUYER,
+          });
+        }
 
         const user = await this.userRepo.create(userParams);
 
@@ -97,6 +103,7 @@ export default class UserService extends Base {
               email: user.email,
               country: user.country,
               isSeller: user.isSeller,
+              customerId: user.customerId,
             } as IUser;
             user.password = undefined;
 

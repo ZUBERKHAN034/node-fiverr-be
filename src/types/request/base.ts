@@ -23,4 +23,5 @@ export interface TokenUser {
   email: string;
   country: string;
   isSeller: boolean;
+  customerId: string | null;
 }
