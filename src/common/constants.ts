@@ -10,6 +10,8 @@ const constants = {
     ROLE: {
       USER: 'user',
       ADMIN: 'admin',
+      BUYER: 'buyer',
+      SELLER: 'seller',
     },
 
     HASH_TYPES: {
