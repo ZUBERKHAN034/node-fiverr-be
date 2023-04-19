@@ -34,26 +34,10 @@ const registerUser = {
               example: 'usa',
               required: true,
             },
-            img: {
-              type: 'string',
-              example:
-                'https://marketplace.canva.com/EAFEits4-uw/1/0/1600w/canva-boy-cartoon-gamer-animated-twitch-profile-photo-oEqs2yqaL8s.jpg',
-              required: false,
-            },
-            desc: {
-              type: 'string',
-              example: 'Developer',
-              required: false,
-            },
-            phone: {
-              type: 'string',
-              example: '+1 234 567 89',
-              required: false,
-            },
             isSeller: {
               type: 'boolean',
               example: ['true', 'false'],
-              required: false,
+              required: true,
             },
             gender: {
               type: 'string',
@@ -91,7 +75,7 @@ const loginUser = {
           properties: {
             username: {
               type: 'string',
-              example: 'john',
+              example: 'john or john@gmail.com',
             },
             password: {
               type: 'string',
@@ -126,6 +110,10 @@ const loginUser = {
               country: {
                 type: 'string',
                 example: 'usa',
+              },
+              gender: {
+                type: 'string',
+                example: 'male',
               },
               isSeller: {
                 type: 'boolean',

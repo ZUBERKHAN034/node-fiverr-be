@@ -9,10 +9,7 @@ export default class User extends Base {
       password: this.isString(true),
       country: this.isString(true),
       gender: this.isGender(true),
-      img: this.isString(false),
-      desc: this.isString(false),
-      phone: this.isPhone(false),
-      isSeller: this.isBoolean(false),
+      isSeller: this.isBoolean(true),
     };
 
     return Joi.object(schema);

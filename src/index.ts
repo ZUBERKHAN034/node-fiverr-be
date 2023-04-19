@@ -19,7 +19,7 @@ export class ApiServer {
   public app: express.Application;
   private PORT;
   private corsOptions = () => {
-    return cors({ origin: process.env.FE_BASE_URL || constants.ENUMS.FE_BASE_URL, credentials: true });
+    return cors({ origin: constants.ENUMS.FE_BASE_URL, credentials: true });
   };
 
   // private resp = new TPCResponse();

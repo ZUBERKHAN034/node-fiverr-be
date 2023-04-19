@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 export interface IUser extends Document {
   username: string;
   email: string;
+  verified: boolean;
   password: string;
   country: string;
   img: string;
@@ -11,6 +12,7 @@ export interface IUser extends Document {
   desc: string;
   isSeller: boolean;
   gender: string;
+  type: 'GOOGLE' | 'CUSTOM';
   createdAt?: number;
   updatedAt?: number;
 }
@@ -38,6 +40,7 @@ const UserSchema = new Schema(
       match: emailMatch,
       unique: [true, 'Email already exists'],
     },
+    verified: { type: Boolean, default: false },
     password: {
       type: String,
       required: true,
@@ -65,6 +68,11 @@ const UserSchema = new Schema(
       type: String,
       enum: ['male', 'female'],
       required: true,
+    },
+    type: {
+      type: String,
+      enum: ['GOOGLE', 'CUSTOM'],
+      default: 'CUSTOM',
     },
   },
   { timestamps: true }
