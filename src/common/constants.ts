@@ -1,6 +1,6 @@
 const constants = {
   ENUMS: {
-    FE_BASE_URL: 'http://localhost:5173',
+    FE_BASE_URL: process.env.FE_BASE_URL || 'http://localhost:5173',
 
     ORDER: {
       ASC: 'asc',
@@ -86,6 +86,7 @@ const constants = {
   },
 
   ERROR_MESSAGES: {
+    USER_NOT_VERIFIED: 'Your account not verified',
     NOT_AUTHORIZED: 'You are not authorized',
     USER_NOT_FOUND: 'User not found.',
     CONVERSATION_NOT_FOUND: 'Conversation not found.',

@@ -1,6 +1,6 @@
 import type { SetupAcctProfile, UserDetails } from '../types/request/user';
 import { ParamsID, TokenUser, UploadFile } from '../types/request/base';
-import { UserRepository } from '../db/repositories';
+import { CodeRepository, UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
 import { RespError } from '../lib/wr_response';
 import { IUser } from '../db/models/user';
@@ -28,6 +28,7 @@ export default class UserService extends Base {
   public async register(params: UserDetails): Promise<ServiceReturnVal<string>> {
     const returnVal: ServiceReturnVal<string> = {};
     try {
+      const codeRepo = new CodeRepository();
       const isUser = await this.userRepo.userByEmail(params.email);
 
       if (utility.isEmpty(isUser)) {
@@ -45,10 +46,20 @@ export default class UserService extends Base {
         } as IUser;
 
         const user = await this.userRepo.create(userParams);
-        const varsToReplace = { username: user.username };
 
-        const welcomeEmailHtml = this.emailer.renderEmailTemplate('welcome_email', varsToReplace, 'email-templates');
-        await this.emailer.sendEmail(user.email, `Welcome to ${constants.SEND_IN_BLUE.SENDER_NAME}`, welcomeEmailHtml);
+        // send mail to verify account
+        await codeRepo.deactivateOldCodes(user.email, constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT);
+
+        const hash = utility.hash(12);
+        await codeRepo.add(hash, constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT, undefined, user.email);
+
+        const varsToReplace = { hash: hash, url: `${constants.ENUMS.FE_BASE_URL}/account-verify/` };
+        const verifyEmailHtml = this.emailer.renderEmailTemplate('verify_email', varsToReplace, 'email-templates');
+        await this.emailer.sendEmail(
+          params.email,
+          `Verify Your ${constants.SEND_IN_BLUE.SENDER_NAME} Account`,
+          verifyEmailHtml
+        );
 
         returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;
       } else {
@@ -73,20 +84,30 @@ export default class UserService extends Base {
       const user = await this.userRepo.findOne({
         $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
       });
+
       // If user exists
       if (!utility.isEmpty(user)) {
         const match = await bcrypt.compare(params.password, user.password);
+
         if (match) {
-          const usr = {
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            country: user.country,
-            isSeller: user.isSeller,
-          } as IUser;
-          user.password = undefined;
-          const token = jwt.sign(usr, process.env.JWT!);
-          returnVal.data = { user, token: token };
+          if (user.verified) {
+            const usr = {
+              _id: user._id,
+              username: user.username,
+              email: user.email,
+              country: user.country,
+              isSeller: user.isSeller,
+            } as IUser;
+            user.password = undefined;
+
+            const token = jwt.sign(usr, process.env.JWT!);
+            returnVal.data = { user, token: token };
+          } else {
+            returnVal.error = new RespError(
+              constants.RESP_ERR_CODES.ERR_401,
+              constants.ERROR_MESSAGES.USER_NOT_VERIFIED
+            );
+          }
         } else {
           returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_401, constants.ERROR_MESSAGES.INVALID_PASSWORD);
         }
@@ -208,6 +229,10 @@ export default class UserService extends Base {
 
       const usr = await this.userRepo.update(userId, setupParams);
       usr.password = undefined;
+
+      const varsToReplace = { username: usr.username };
+      const welcomeEmailHtml = this.emailer.renderEmailTemplate('welcome_email', varsToReplace, 'email-templates');
+      await this.emailer.sendEmail(usr.email, `Welcome to ${constants.SEND_IN_BLUE.SENDER_NAME}`, welcomeEmailHtml);
 
       returnVal.data = usr;
     } catch (error) {

@@ -121,7 +121,7 @@ class StripeHelper {
     metadata?: { productId?: string; subscriptionId?: string; orderId?: string }
   ): Promise<string> {
     try {
-      const DOMAIN_URL = process.env.FE_BASE_URL || constants.ENUMS.FE_BASE_URL;
+      const DOMAIN_URL = constants.ENUMS.FE_BASE_URL;
       let SUCCESS_URL = `/success`;
       let CANCEL_URL = `/failure`;
 
