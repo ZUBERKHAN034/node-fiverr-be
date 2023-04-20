@@ -297,4 +297,55 @@ const getSetupAcctProfile = {
   },
 };
 
-export { registerUser, loginUser, deleteUser, logoutUser, uploadUserAssets, getUser, getSetupAcctProfile, security };
+const getVerifyLink = {
+  tags: ['Users'],
+  description: 'Verification link handler for users',
+  operationId: 'getVerifyLink',
+  requestBody: {
+    content: {
+      'application/x-www-form-urlencoded': {
+        schema: {
+          type: 'object',
+          properties: {
+            hash: {
+              type: 'string',
+              example: 'd638d4e43708998526e20279',
+              required: true,
+            },
+            password: {
+              type: 'string',
+              example: 'sample',
+              required: false,
+            },
+          },
+        },
+      },
+    },
+  },
+  responses: {
+    '200': {
+      description: 'Returns Ok on success',
+    },
+    '404': {
+      description: 'Invalid link',
+    },
+    '410': {
+      description: 'Link expired',
+    },
+    '500': {
+      description: 'Internal server error',
+    },
+  },
+};
+
+export {
+  registerUser,
+  loginUser,
+  deleteUser,
+  logoutUser,
+  uploadUserAssets,
+  getUser,
+  getSetupAcctProfile,
+  getVerifyLink,
+  security,
+};

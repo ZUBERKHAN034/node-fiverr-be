@@ -36,7 +36,7 @@ class StripeHelper {
         limit: 1,
       };
       const customer = await this.stripe.customers.list(paramsCustomer);
-      return customer.data[0] ? customer.data[0] : null;
+      return customer.data[0] ? customer.data[0].id : null;
     } catch (error) {
       throw new Error(error);
     }

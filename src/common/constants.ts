@@ -18,7 +18,6 @@ const constants = {
       CREATE_NEW_ACCT: 'CREATE_NEW_ACCT',
       RESET_PASSWORD: 'RESET_PASSWORD',
       UPDATE_EMAIL: 'UPDATE_EMAIL',
-      INVITE_EMAIL: 'INVITE_EMAIL',
     },
 
     USER_LIST_SORT_BY: {
@@ -44,8 +43,8 @@ const constants = {
     },
 
     HASH_EXPIRES_IN: {
+      VERIFY_EXPIRY: 1440,
       DEFAULT_EXPIRY: 10,
-      INVITE_EXPIRY: 1440,
     },
 
     CHECKOUT_MODE: {
@@ -99,7 +98,7 @@ const constants = {
     FILE_NOT_FOUND: 'File not found.',
     USER_ALREADY_EXISTS: 'User already exists',
     REVIEW_ALREADY_EXISTS: 'Review already exists',
-    INVALID_PASSWORD: 'Invalid Password',
+    INVALID_PASSWORD: 'Invalid Password or Email',
     RECORD_NOT_FOUND: 'Record not found.',
     PASSWORD_NOT_MATCHED: 'Password not matched',
     SAME_OLD_PASSWORD: 'Same as old',
@@ -110,8 +109,8 @@ const constants = {
     SUBSCRIPTION_EXPIRED: 'Subscription expired',
     PRODUCT_IS_ALREADY_DOWNLOADED: 'Product is already downloaded',
     LIMIT_REACHED: 'Limit reached',
-    HASH_EXPIRED: 'Hash expired',
-    HASH_NOT_FOUND: 'Hash not found',
+    HASH_EXPIRED: 'Link expired',
+    INVALID_HASH: 'Invalid link',
     ADDRESS_NOT_FOUND: 'User billing address not found.',
     SESSIONS_NOT_FOUND: 'Stripe session_id not found.',
     PLAN_NOT_FOUND: 'Plan not found.',
@@ -126,6 +125,7 @@ const constants = {
     PASSWORD_SET: 'Password set successfully',
     PASSWORD_RESET: 'Password reset successfully',
     EMAIL_UPDATED: 'Email updated successfully',
+    VERIFY_EMAIL_SENDED: 'Verify email sent to your mail successfully',
   },
 
   INS_EXCLUDE_COLS: ['created_at', 'updated_at', 'deleted_at'],

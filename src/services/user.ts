@@ -1,4 +1,4 @@
-import type { SetupAcctProfile, UserDetails } from '../types/request/user';
+import type { SetupAcctProfile, UserDetails, VerifyHash } from '../types/request/user';
 import { ParamsID, TokenUser, UploadFile } from '../types/request/base';
 import { CodeRepository, UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
@@ -7,10 +7,11 @@ import { IUser } from '../db/models/user';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import utility from '../lib/utility';
-import Base from './base';
 import constants from '../common/constants';
 import appFunctions from '../lib/app_functions';
 import stripe from '../lib/stripe_helper';
+import moment from 'moment';
+import Base from './base';
 import Emailer from '../common/emailer';
 
 export default class UserService extends Base {
@@ -43,31 +44,23 @@ export default class UserService extends Base {
           gender: params.gender,
         } as IUser;
 
-        if (params.isSeller != 'true') {
-          userParams.customerId = await stripe.createCustomer({
-            email: params.email,
-            name: params.username,
-            description: constants.ENUMS.ROLE.BUYER,
-          });
-        }
-
         const user = await this.userRepo.create(userParams);
 
         // send mail to verify account
         await codeRepo.deactivateOldCodes(user.email, constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT);
 
         const hash = utility.hash(12);
-        await codeRepo.add(hash, constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT, undefined, user.email);
+        await codeRepo.add(hash, constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT, user._id, user.email);
 
         const varsToReplace = { hash: hash, url: `${constants.ENUMS.FE_BASE_URL}/account-verify/` };
         const verifyEmailHtml = this.emailer.renderEmailTemplate('verify_email', varsToReplace, 'email-templates');
         await this.emailer.sendEmail(
-          params.email,
+          user.email,
           `Verify Your ${constants.SEND_IN_BLUE.SENDER_NAME} Account`,
           verifyEmailHtml
         );
 
-        returnVal.data = constants.SUCCESS_MESSAGES.REGISTERED;
+        returnVal.data = constants.SUCCESS_MESSAGES.VERIFY_EMAIL_SENDED;
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_409, constants.ERROR_MESSAGES.USER_ALREADY_EXISTS);
       }
@@ -229,6 +222,7 @@ export default class UserService extends Base {
       const userId = this.userRepo.toObjectId(user._id);
 
       const setupParams = {
+        completed: true,
         phone: params.phone,
         desc: params.desc,
         img: params.img,
@@ -237,11 +231,99 @@ export default class UserService extends Base {
       const usr = await this.userRepo.update(userId, setupParams);
       usr.password = undefined;
 
-      const varsToReplace = { username: usr.username };
-      const welcomeEmailHtml = this.emailer.renderEmailTemplate('welcome_email', varsToReplace, 'email-templates');
-      await this.emailer.sendEmail(usr.email, `Welcome to ${constants.SEND_IN_BLUE.SENDER_NAME}`, welcomeEmailHtml);
-
       returnVal.data = usr;
+    } catch (error) {
+      returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
+    }
+    return returnVal;
+  }
+
+  /**
+   * Function to verify the link hash code for user verifications.
+   *
+   * @param {VerifyHash}
+   * @returns {ServiceReturnVal}
+   */
+  public async verifyLink(params: VerifyHash): Promise<ServiceReturnVal<string>> {
+    const returnVal: ServiceReturnVal<string> = {};
+    try {
+      const codeRepo = new CodeRepository();
+      const code = await codeRepo.findOne({ code: params.hash });
+
+      if (!utility.isEmpty(code)) {
+        const createdTime = moment.utc(code.createdAt);
+        const currentTime = moment().utc();
+        const diffInTime = currentTime.diff(createdTime, 'minutes');
+        const expiresIn =
+          code.type === constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT
+            ? constants.ENUMS.HASH_EXPIRES_IN.VERIFY_EXPIRY
+            : constants.ENUMS.HASH_EXPIRES_IN.DEFAULT_EXPIRY;
+
+        if (diffInTime <= expiresIn) {
+          switch (code.type) {
+            case constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT: {
+              const user = await this.userRepo.findById(code.userId);
+              const createNewAcctParams = { verified: true } as IUser;
+
+              // If user is buyer then create new stripe customer
+              if (user.isSeller === false) {
+                const alreadyExitsCustomerId = await stripe.customerByEmail(code.email);
+
+                if (utility.isEmpty(alreadyExitsCustomerId)) {
+                  const newCreatedCustomerId = await stripe.createCustomer({
+                    email: user.email,
+                    name: user.username,
+                    description: constants.ENUMS.ROLE.BUYER,
+                  });
+
+                  createNewAcctParams.customerId = newCreatedCustomerId;
+                } else {
+                  createNewAcctParams.customerId = alreadyExitsCustomerId;
+                }
+              }
+
+              // Sending Welcome Email on successful verification
+              const varsToReplace = { username: user.username };
+              const welcomeEmailHtml = this.emailer.renderEmailTemplate(
+                'welcome_email',
+                varsToReplace,
+                'email-templates'
+              );
+
+              await this.emailer.sendEmail(
+                user.email,
+                `Welcome to ${constants.SEND_IN_BLUE.SENDER_NAME}`,
+                welcomeEmailHtml
+              );
+
+              await this.userRepo.update(user._id, createNewAcctParams);
+              break;
+            }
+
+            case constants.ENUMS.HASH_TYPES.RESET_PASSWORD: {
+              const resetPasswordParams = { password: await bcrypt.hash(params.password, 10) } as IUser;
+
+              await this.userRepo.update(code.userId, resetPasswordParams);
+              break;
+            }
+
+            case constants.ENUMS.HASH_TYPES.UPDATE_EMAIL: {
+              const updateEmailParams = { email: code.email } as IUser;
+
+              await this.userRepo.update(code.userId, updateEmailParams);
+              break;
+            }
+          }
+
+          returnVal.data = constants.SUCCESS_MESSAGES.OK;
+        } else {
+          returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_410, constants.ERROR_MESSAGES.HASH_EXPIRED);
+        }
+        // if expired remove hash
+        await codeRepo.deactivateCode(params.hash);
+      } else {
+        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.INVALID_HASH);
+      }
     } catch (error) {
       returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
     }

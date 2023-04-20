@@ -43,7 +43,7 @@ export class BaseRepository<T extends mongoose.Document> implements IRead<T>, IW
     await this._model.deleteOne({ _id: this.toObjectId(_id) });
   }
 
-  async findById(_id: string): Promise<T | null> {
+  async findById(_id: string | mongoose.Types.ObjectId): Promise<T | null> {
     return await this._model.findById(_id);
   }
 
