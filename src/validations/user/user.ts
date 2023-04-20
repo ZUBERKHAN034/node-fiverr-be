@@ -32,4 +32,12 @@ export default class User extends Base {
 
     return Joi.object(schema);
   }
+
+  public getVerifyLinkAS(): ObjectSchema {
+    const schema: PartialSchemaMap = {};
+    schema.hash = this.isString(true);
+    schema.password = this.isString(false);
+
+    return Joi.object(schema);
+  }
 }

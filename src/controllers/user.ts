@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { SetupAcctProfile, UserDetails } from '../types/request/user';
+import { SetupAcctProfile, UserDetails, VerifyHash } from '../types/request/user';
 import { RespError, WRResponse } from '../lib/wr_response';
 import { ParamsID, UploadFile } from '../types/request/base';
 import UserService from '../services/user';
@@ -86,6 +86,18 @@ export default class UserController {
     const result = valSchema.validate(params);
     if (result.error == null) {
       const resp = await this.service.setupAcctProfile(params, request.currentUser);
+      this.resp.resp(response).send(resp);
+    } else {
+      this.resp.resp(response).error(RespError.validation(result.error.message));
+    }
+  }
+
+  public async verifyLink(request: WRRequest<undefined, VerifyHash, undefined>, response: Response) {
+    const valSchema = new User().getVerifyLinkAS();
+    const params = request.body;
+    const result = valSchema.validate(params);
+    if (result.error == null) {
+      const resp = await this.service.verifyLink(params);
       this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));

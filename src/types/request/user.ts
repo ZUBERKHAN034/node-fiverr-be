@@ -18,3 +18,9 @@ export interface SetupAcctProfile extends Query {
   phone?: string;
   desc?: string;
 }
+
+export interface VerifyHash extends Query {
+  hash?: string;
+  password?: string;
+  email?: string;
+}

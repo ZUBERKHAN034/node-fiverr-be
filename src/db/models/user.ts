@@ -14,6 +14,7 @@ export interface IUser extends Document {
   gender: string;
   type: 'GOOGLE' | 'CUSTOM';
   customerId: string;
+  completed: boolean;
   createdAt?: number;
   updatedAt?: number;
 }
@@ -78,6 +79,10 @@ const UserSchema = new Schema(
     customerId: {
       type: String,
       default: null,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

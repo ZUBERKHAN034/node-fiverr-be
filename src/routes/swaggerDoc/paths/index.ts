@@ -6,6 +6,7 @@ import {
   uploadUserAssets,
   getUser,
   getSetupAcctProfile,
+  getVerifyLink,
 } from './user';
 import { createGig, deleteGig, getGig, getGigs, getMyGigs } from './gig';
 import { createReview, deleteReview, getReviewsByGigId } from './review';
@@ -42,6 +43,9 @@ const paths = {
   },
   '/user/setup-account': {
     post: getSetupAcctProfile,
+  },
+  '/services/verify-link': {
+    post: getVerifyLink,
   },
   // GIGS
   '/gig': {
