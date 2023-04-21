@@ -175,6 +175,6 @@ const constants = {
     SENDER_NAME: 'Fiverr',
     SENDER_EMAIL: `no-reply@${process.env.SEND_IN_BLUE_DOMAIN}`,
   },
-};
+} as const;
 
 export default constants;
