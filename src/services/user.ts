@@ -221,16 +221,38 @@ export default class UserService extends Base {
     try {
       const userId = this.userRepo.toObjectId(user._id);
 
-      const setupParams = {
+      const setupProfileParams = {
         completed: true,
         phone: params.phone,
         desc: params.desc,
         img: params.img,
       } as IUser;
 
-      const usr = await this.userRepo.update(userId, setupParams);
-      usr.password = undefined;
+      // If user is buyer then create new stripe customer
+      if (user.isSeller === false) {
+        const alreadyExitsCustomerId = await stripe.customerByEmail(user.email);
 
+        if (utility.isEmpty(alreadyExitsCustomerId)) {
+          const newCreatedCustomerId = await stripe.createCustomer({
+            email: user.email,
+            name: user.username,
+            description: constants.ENUMS.ROLE.BUYER,
+          });
+
+          setupProfileParams.customerId = newCreatedCustomerId;
+        } else {
+          setupProfileParams.customerId = alreadyExitsCustomerId;
+        }
+      }
+
+      // Sending Welcome Email on successful verification
+      const varsToReplace = { username: user.username };
+      const welcomeEmailHtml = this.emailer.renderEmailTemplate('welcome_email', varsToReplace, 'email-templates');
+
+      await this.emailer.sendEmail(user.email, `Welcome to ${constants.SEND_IN_BLUE.SENDER_NAME}`, welcomeEmailHtml);
+
+      const usr = await this.userRepo.update(userId, setupProfileParams);
+      usr.password = undefined;
       returnVal.data = usr;
     } catch (error) {
       returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
@@ -253,6 +275,7 @@ export default class UserService extends Base {
       if (!utility.isEmpty(code)) {
         const createdTime = moment.utc(code.createdAt);
         const currentTime = moment().utc();
+
         const diffInTime = currentTime.diff(createdTime, 'minutes');
         const expiresIn =
           code.type === constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT
@@ -262,41 +285,9 @@ export default class UserService extends Base {
         if (diffInTime <= expiresIn) {
           switch (code.type) {
             case constants.ENUMS.HASH_TYPES.CREATE_NEW_ACCT: {
-              const user = await this.userRepo.findById(code.userId);
               const createNewAcctParams = { verified: true } as IUser;
 
-              // If user is buyer then create new stripe customer
-              if (user.isSeller === false) {
-                const alreadyExitsCustomerId = await stripe.customerByEmail(code.email);
-
-                if (utility.isEmpty(alreadyExitsCustomerId)) {
-                  const newCreatedCustomerId = await stripe.createCustomer({
-                    email: user.email,
-                    name: user.username,
-                    description: constants.ENUMS.ROLE.BUYER,
-                  });
-
-                  createNewAcctParams.customerId = newCreatedCustomerId;
-                } else {
-                  createNewAcctParams.customerId = alreadyExitsCustomerId;
-                }
-              }
-
-              // Sending Welcome Email on successful verification
-              const varsToReplace = { username: user.username };
-              const welcomeEmailHtml = this.emailer.renderEmailTemplate(
-                'welcome_email',
-                varsToReplace,
-                'email-templates'
-              );
-
-              await this.emailer.sendEmail(
-                user.email,
-                `Welcome to ${constants.SEND_IN_BLUE.SENDER_NAME}`,
-                welcomeEmailHtml
-              );
-
-              await this.userRepo.update(user._id, createNewAcctParams);
+              await this.userRepo.update(code.userId, createNewAcctParams);
               break;
             }
 
