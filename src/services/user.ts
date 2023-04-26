@@ -79,7 +79,7 @@ export default class UserService extends Base {
   public async login(params: UserDetails): Promise<ServiceReturnVal<any>> {
     const returnVal: ServiceReturnVal<any> = {};
     try {
-      const usernameOrEmail = params.username.toLowerCase();
+      const usernameOrEmail = params.username.trim().toLowerCase();
       const user = await this.userRepo.findOne({
         $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
       });
