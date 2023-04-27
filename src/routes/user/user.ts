@@ -43,5 +43,6 @@ export default class UserRoute {
     this.router.get('/services/user/:id', this.controller.get.bind(this.controller));
     this.router.post('/user/setup-account', this.controller.setupAcctProfile.bind(this.controller));
     this.router.post('/services/verify-link', this.controller.verifyLink.bind(this.controller));
+    this.router.post('/services/forgot-password', this.controller.forgotPassword.bind(this.controller));
   }
 }

@@ -338,6 +338,42 @@ const getVerifyLink = {
   },
 };
 
+const getForgotPassword = {
+  tags: ['Users'],
+  description: 'User Forgot Password',
+  operationId: 'getForgotPassword',
+  requestBody: {
+    content: {
+      'application/x-www-form-urlencoded': {
+        schema: {
+          type: 'object',
+          properties: {
+            email: {
+              type: 'string',
+              example: 'john@gmail.com',
+            },
+          },
+        },
+      },
+    },
+    required: true,
+  },
+  responses: {
+    '200': {
+      description: 'RESET PASSWORD link send successfully!',
+    },
+    '400': {
+      description: 'User email must be valid format',
+    },
+    '404': {
+      description: 'User not found',
+    },
+    '500': {
+      description: 'Internal server error',
+    },
+  },
+};
+
 export {
   registerUser,
   loginUser,
@@ -347,5 +383,6 @@ export {
   getUser,
   getSetupAcctProfile,
   getVerifyLink,
+  getForgotPassword,
   security,
 };

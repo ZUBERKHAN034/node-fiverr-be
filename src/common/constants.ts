@@ -38,13 +38,12 @@ const constants = {
 
     LOGIN_TYPE: {
       GOOGLE: 'GOOGLE',
-      FACEBOOK: 'FACEBOOK',
       CUSTOM: 'CUSTOM',
     },
 
     HASH_EXPIRES_IN: {
-      VERIFY_EXPIRY: 1440,
-      DEFAULT_EXPIRY: 10,
+      VERIFY_EXPIRY: 10,
+      DEFAULT_EXPIRY: 1440,
     },
 
     CHECKOUT_MODE: {
