@@ -320,4 +320,43 @@ export default class UserService extends Base {
     }
     return returnVal;
   }
+
+  /**
+   * Function to handle forgot password and send reset password link
+   *
+   * @param {UserDetails}
+   * @returns {ServiceReturnVal}
+   */
+  public async forgotPassword(params: UserDetails): Promise<ServiceReturnVal<string>> {
+    const returnVal: ServiceReturnVal<string> = {};
+    try {
+      const codeRepo = new CodeRepository();
+      const user = await this.userRepo.findOne({ email: params.email });
+
+      if (
+        (!utility.isEmpty(user) && user.verified !== false) ||
+        (!utility.isEmpty(user) && user.type !== constants.ENUMS.LOGIN_TYPE.CUSTOM)
+      ) {
+        await codeRepo.deactivateOldCodes(params.email, constants.ENUMS.HASH_TYPES.RESET_PASSWORD);
+
+        const hash = utility.hash(12);
+        await codeRepo.add(hash, constants.ENUMS.HASH_TYPES.RESET_PASSWORD, user._id, params.email);
+
+        const varsToReplace = { hash: hash, url: `${constants.ENUMS.FE_BASE_URL}/reset-password/` };
+        const resetPasswordEmailHtml = this.emailer.renderEmailTemplate(
+          'reset_password',
+          varsToReplace,
+          'email-templates'
+        );
+
+        await this.emailer.sendEmail(params.email, 'Reset Password Link', resetPasswordEmailHtml);
+        returnVal.data = constants.SUCCESS_MESSAGES.EMAIL_SEND;
+      } else {
+        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.USER_NOT_FOUND);
+      }
+    } catch (error) {
+      returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
+    }
+    return returnVal;
+  }
 }

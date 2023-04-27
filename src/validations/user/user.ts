@@ -40,4 +40,11 @@ export default class User extends Base {
 
     return Joi.object(schema);
   }
+
+  public getVerifyEmailVS(): ObjectSchema {
+    const schema: PartialSchemaMap = {};
+    schema.email = this.isEmail(true);
+
+    return Joi.object(schema);
+  }
 }

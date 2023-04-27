@@ -103,4 +103,16 @@ export default class UserController {
       this.resp.resp(response).error(RespError.validation(result.error.message));
     }
   }
+
+  public async forgotPassword(request: WRRequest<undefined, UserDetails, undefined>, response: Response) {
+    const valSchema = new User().getVerifyEmailVS();
+    const params = request.body;
+    const result = valSchema.validate(params);
+    if (result.error == null) {
+      const result = await this.service.forgotPassword(params);
+      this.resp.resp(response).send(result);
+    } else {
+      this.resp.resp(response).error(RespError.validation(result.error.message));
+    }
+  }
 }
