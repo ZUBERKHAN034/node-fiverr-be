@@ -374,6 +374,47 @@ const getForgotPassword = {
   },
 };
 
+const getSocialLogin = {
+  tags: ['Users'],
+  description: 'Sign with google',
+  operationId: 'getSocialLogin',
+  requestBody: {
+    content: {
+      'application/x-www-form-urlencoded': {
+        schema: {
+          type: 'object',
+          properties: {
+            credential: {
+              type: 'string',
+              example:
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmaXJzdF9uYW1lIjoiQmh1dmEiLCJsYXN0X25hbWUiOiJCaGF2aW4iLCJmdWxsX25hbWUiOiJCaHV2YSBCaGF2aW4iLCJlbWFpbCI6ImJoYXZpbi5iMkBnbWFpbC5jb20iLCJyb2xlX25hbWUiOiJ1c2VyIiwiaWF0IjoxNjY1NzQxNjE5LCJleHAiOjE2NjU4MjgwMTl9.CCi2PeTODj4hEDavdwbpC5WHxbe9NLRE79n9aQrciKw',
+            },
+            country: {
+              type: 'string',
+              example: 'India',
+            },
+          },
+        },
+      },
+    },
+    required: true,
+  },
+  responses: {
+    '201': {
+      description: 'User log in Successfully',
+    },
+    '400': {
+      description: 'Validation Error',
+    },
+    '403': {
+      description: 'You are unauthorized',
+    },
+    '500': {
+      description: 'Internal server error',
+    },
+  },
+};
+
 export {
   registerUser,
   loginUser,
@@ -384,5 +425,6 @@ export {
   getSetupAcctProfile,
   getVerifyLink,
   getForgotPassword,
+  getSocialLogin,
   security,
 };

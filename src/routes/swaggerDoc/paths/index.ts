@@ -8,6 +8,7 @@ import {
   getSetupAcctProfile,
   getVerifyLink,
   getForgotPassword,
+  getSocialLogin,
 } from './user';
 import { createGig, deleteGig, getGig, getGigs, getMyGigs } from './gig';
 import { createReview, deleteReview, getReviewsByGigId } from './review';
@@ -50,6 +51,9 @@ const paths = {
   },
   '/services/forgot-password': {
     post: getForgotPassword,
+  },
+  '/services/social-login': {
+    post: getSocialLogin,
   },
   // GIGS
   '/gig': {

@@ -1,4 +1,4 @@
-import type { SetupAcctProfile, UserDetails, VerifyHash } from '../types/request/user';
+import type { AuthParams, SetupAcctProfile, UserDetails, VerifyHash } from '../types/request/user';
 import { ParamsID, TokenUser, UploadFile } from '../types/request/base';
 import { CodeRepository, UserRepository } from '../db/repositories';
 import { ServiceReturnVal } from '../types/common';
@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken';
 import utility from '../lib/utility';
 import constants from '../common/constants';
 import appFunctions from '../lib/app_functions';
+import googleAuth from '../lib/google_auth';
 import stripe from '../lib/stripe_helper';
 import moment from 'moment';
 import Base from './base';
@@ -85,7 +86,12 @@ export default class UserService extends Base {
       });
 
       // If user exists
-      if (!utility.isEmpty(user)) {
+      if (!utility.isEmpty(user) && user.type !== constants.ENUMS.LOGIN_TYPE.CUSTOM && user.password === null) {
+        returnVal.error = new RespError(
+          constants.RESP_ERR_CODES.ERR_400,
+          constants.ERROR_MESSAGES.FORGOT_PASSWORD_REQUEST
+        );
+      } else if (!utility.isEmpty(user) && user.password !== null) {
         const match = await bcrypt.compare(params.password, user.password);
 
         if (match) {
@@ -353,6 +359,54 @@ export default class UserService extends Base {
         returnVal.data = constants.SUCCESS_MESSAGES.EMAIL_SEND;
       } else {
         returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_404, constants.ERROR_MESSAGES.USER_NOT_FOUND);
+      }
+    } catch (error) {
+      returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);
+    }
+    return returnVal;
+  }
+
+  /*Function for social auth (google)
+   *
+   * @param {AuthParams}
+   * @returns {ServiceReturnVal}
+   */
+  public async socialLogin(params: AuthParams): Promise<ServiceReturnVal<any>> {
+    const returnVal: ServiceReturnVal<any> = {};
+    try {
+      const payload = (await googleAuth.validate(params.credential)) as IUser;
+
+      if (!utility.isEmpty(payload)) {
+        let user = await this.userRepo.findOne({ email: payload.email });
+
+        if (utility.isEmpty(user)) {
+          const createNewUserParams = {
+            username: payload.username,
+            email: payload.email,
+            img: payload.img,
+            verified: payload.verified,
+            type: constants.ENUMS.LOGIN_TYPE.GOOGLE,
+            gender: constants.ENUMS.USER_GENDER.OTHER,
+            country: params.country,
+          } as IUser;
+
+          user = await this.userRepo.create(createNewUserParams);
+        }
+
+        const usr = {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          country: user.country,
+          isSeller: user.isSeller,
+          customerId: user.customerId,
+        } as IUser;
+        user.password = undefined;
+
+        const token = jwt.sign(usr, process.env.JWT!);
+        returnVal.data = { user, token: token };
+      } else {
+        returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_403, constants.ERROR_MESSAGES.NOT_AUTHORIZED);
       }
     } catch (error) {
       returnVal.error = new RespError(constants.RESP_ERR_CODES.ERR_500, error.message);

@@ -34,16 +34,27 @@ export default class User extends Base {
   }
 
   public getVerifyLinkAS(): ObjectSchema {
-    const schema: PartialSchemaMap = {};
-    schema.hash = this.isString(true);
-    schema.password = this.isString(false);
+    const schema: PartialSchemaMap = {
+      hash: this.isString(true),
+      password: this.isString(false),
+    };
 
     return Joi.object(schema);
   }
 
   public getVerifyEmailVS(): ObjectSchema {
-    const schema: PartialSchemaMap = {};
-    schema.email = this.isEmail(true);
+    const schema: PartialSchemaMap = {
+      email: this.isEmail(true),
+    };
+
+    return Joi.object(schema);
+  }
+
+  public getAuthVS(): ObjectSchema {
+    const schema: PartialSchemaMap = {
+      credential: this.isString(true),
+      country: this.isString(true),
+    };
 
     return Joi.object(schema);
   }

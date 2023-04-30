@@ -32,11 +32,3 @@ export interface listAll extends Query {
 export interface IdParams {
   id?: string;
 }
-
-export interface AuthParams {
-  firstName?: string;
-  lastName?: string;
-  email: string;
-  photo?: string;
-  type?: string;
-}

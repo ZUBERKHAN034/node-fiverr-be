@@ -5,7 +5,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   verified: boolean;
-  password: string;
+  password?: string;
   country: string;
   img: string;
   phone: string;
@@ -45,7 +45,7 @@ const UserSchema = new Schema(
     verified: { type: Boolean, default: false },
     password: {
       type: String,
-      required: true,
+      default: null,
     },
     country: {
       type: String,
@@ -68,7 +68,7 @@ const UserSchema = new Schema(
     },
     gender: {
       type: String,
-      enum: ['male', 'female'],
+      enum: ['male', 'female', 'other'],
       required: true,
     },
     type: {
