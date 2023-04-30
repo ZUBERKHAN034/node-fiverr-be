@@ -24,3 +24,8 @@ export interface VerifyHash extends Query {
   password?: string;
   email?: string;
 }
+
+export interface AuthParams {
+  credential?: string;
+  country?: string;
+}

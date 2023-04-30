@@ -20,6 +20,12 @@ const constants = {
       UPDATE_EMAIL: 'UPDATE_EMAIL',
     },
 
+    USER_GENDER: {
+      FEMALE: 'female',
+      MALE: 'male',
+      OTHER: 'other',
+    },
+
     USER_LIST_SORT_BY: {
       FULL_NAME: 'fullName',
       EMAIL: 'email',

@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { SetupAcctProfile, UserDetails, VerifyHash } from '../types/request/user';
+import { AuthParams, SetupAcctProfile, UserDetails, VerifyHash } from '../types/request/user';
 import { RespError, WRResponse } from '../lib/wr_response';
 import { ParamsID, UploadFile } from '../types/request/base';
 import UserService from '../services/user';
@@ -111,6 +111,29 @@ export default class UserController {
     if (result.error == null) {
       const result = await this.service.forgotPassword(params);
       this.resp.resp(response).send(result);
+    } else {
+      this.resp.resp(response).error(RespError.validation(result.error.message));
+    }
+  }
+
+  public async socialLogin(request: WRRequest<undefined, AuthParams, undefined>, response: Response) {
+    const valSchema = new User().getAuthVS();
+    const params = request.body;
+    const result = valSchema.validate(params);
+    if (result.error == null) {
+      const resp = await this.service.socialLogin(params);
+      if (resp.data?.token) {
+        const { token } = resp.data;
+        const oneMonth = 30 * 24 * 60 * 60 * 1000;
+        const expireIn = new Date(Date.now() + oneMonth);
+        const cookieParams = { expires: expireIn, httpOnly: true };
+        if (process.env.FE_BASE_URL) {
+          cookieParams['sameSite'] = 'none';
+          cookieParams['secure'] = true;
+        }
+        response.cookie(constants.ENUMS.TOKENS.ACCESS_TOKEN, token, cookieParams);
+      }
+      this.resp.resp(response).send(resp);
     } else {
       this.resp.resp(response).error(RespError.validation(result.error.message));
     }
