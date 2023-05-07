@@ -17,7 +17,7 @@ import { DBManager } from './db/db_manager';
 
 export class ApiServer {
   public app: express.Application;
-  private PORT;
+  private PORT: number | string;
   private corsOptions = () => {
     return cors({ origin: constants.ENUMS.FE_BASE_URL, credentials: true });
   };

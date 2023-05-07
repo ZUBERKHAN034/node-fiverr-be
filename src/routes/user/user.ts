@@ -41,7 +41,7 @@ export default class UserRoute {
     this.router.post('/user', this.controller.delete.bind(this.controller));
     this.router.post('/user/logout', this.controller.logout.bind(this.controller));
     this.router.get('/services/user/:id', this.controller.get.bind(this.controller));
-    this.router.post('/user/setup-account', this.controller.setupAcctProfile.bind(this.controller));
+    this.router.put('/user/setup-account', this.controller.setupAcctProfile.bind(this.controller));
     this.router.post('/services/verify-link', this.controller.verifyLink.bind(this.controller));
     this.router.post('/services/forgot-password', this.controller.forgotPassword.bind(this.controller));
     this.router.post('/services/social-login', this.controller.socialLogin.bind(this.controller));
