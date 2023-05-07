@@ -44,7 +44,7 @@ const paths = {
     get: getUser,
   },
   '/user/setup-account': {
-    post: getSetupAcctProfile,
+    put: getSetupAcctProfile,
   },
   '/services/verify-link': {
     post: getVerifyLink,
