@@ -12,7 +12,7 @@ export default class OrderRoute {
 
   routes() {
     this.router.post('/favorite', this.controller.create.bind(this.controller));
-    this.router.post('/favorite/:id', this.controller.delete.bind(this.controller));
+    this.router.delete('/favorite/:id', this.controller.delete.bind(this.controller));
     this.router.get('/favorites', this.controller.favorites.bind(this.controller));
   }
 }
