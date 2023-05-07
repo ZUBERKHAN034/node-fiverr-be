@@ -35,7 +35,7 @@ const paths = {
     post: uploadUserAssets,
   },
   '/user': {
-    post: deleteUser,
+    delete: deleteUser,
   },
   '/user/logout': {
     post: logoutUser,
@@ -60,7 +60,7 @@ const paths = {
     post: createGig,
   },
   '/gig/{id}': {
-    post: deleteGig,
+    delete: deleteGig,
   },
   '/services/gig/{id}': {
     get: getGig,
@@ -76,7 +76,7 @@ const paths = {
     post: createReview,
   },
   '/review/{id}': {
-    post: deleteReview,
+    delete: deleteReview,
   },
   '/services/reviews/{id}': {
     get: getReviewsByGigId,
@@ -96,7 +96,7 @@ const paths = {
     get: getConversations,
   },
   '/conversation-read': {
-    post: updateConversation,
+    put: updateConversation,
   },
   '/conversation/{sellerId}/{buyerId}': {
     get: getConversationBySellerIdAndBuyerId,
@@ -116,7 +116,7 @@ const paths = {
     post: createFavorite,
   },
   '/favorite/{id}': {
-    post: deleteFavoriteByGigId,
+    delete: deleteFavoriteByGigId,
   },
   '/favorites': {
     get: getFavorites,

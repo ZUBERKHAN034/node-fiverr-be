@@ -38,7 +38,7 @@ export default class UserRoute {
       this.upload.fields([{ name: 'assets', maxCount: 1 }]),
       this.controller.upload.bind(this.controller)
     );
-    this.router.post('/user', this.controller.delete.bind(this.controller));
+    this.router.delete('/user', this.controller.delete.bind(this.controller));
     this.router.post('/user/logout', this.controller.logout.bind(this.controller));
     this.router.get('/services/user/:id', this.controller.get.bind(this.controller));
     this.router.put('/user/setup-account', this.controller.setupAcctProfile.bind(this.controller));

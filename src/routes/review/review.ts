@@ -12,7 +12,7 @@ export default class ReviewRoute {
 
   routes() {
     this.router.post('/review', this.controller.create.bind(this.controller));
-    this.router.post('/review/:id', this.controller.delete.bind(this.controller));
+    this.router.delete('/review/:id', this.controller.delete.bind(this.controller));
     this.router.get('/services/reviews/:id', this.controller.reviews.bind(this.controller));
   }
 }
