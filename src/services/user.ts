@@ -298,7 +298,7 @@ export default class UserService extends Base {
             }
 
             case constants.ENUMS.HASH_TYPES.RESET_PASSWORD: {
-              const resetPasswordParams = { password: await bcrypt.hash(params.password, 10) } as IUser;
+              const resetPasswordParams = { password: await bcrypt.hash(params.password, 10), verified: true } as IUser;
 
               await this.userRepo.update(code.userId, resetPasswordParams);
               break;
@@ -340,7 +340,7 @@ export default class UserService extends Base {
       const user = await this.userRepo.findOne({ email: params.email });
 
       if (
-        (!utility.isEmpty(user) && user.verified !== false) ||
+        (!utility.isEmpty(user)) ||
         (!utility.isEmpty(user) && user.type !== constants.ENUMS.LOGIN_TYPE.CUSTOM)
       ) {
         await codeRepo.deactivateOldCodes(params.email, constants.ENUMS.HASH_TYPES.RESET_PASSWORD);
