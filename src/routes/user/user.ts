@@ -20,7 +20,7 @@ export default class UserRoute {
         const fileName = `${constants.AWS.ASSET_FOLDER.PUBLIC.USER}/${file.fieldname}-${Date.now()}${path.extname(
           file.originalname
         )}`;
-        cb(null, fileName);
+        cb(new Error('only single file is allowed!'), fileName);
       },
     }),
   });
