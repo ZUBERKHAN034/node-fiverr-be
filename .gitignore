@@ -6,3 +6,4 @@ node_modules/
 docker-logs/
 logs/
 *.rdb
+.env
