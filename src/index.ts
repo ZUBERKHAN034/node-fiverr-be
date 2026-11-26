@@ -1,9 +1,18 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-if (['local', 'nodemon-local'].includes(process.env.NODE_ENV?.trim())) {
-  let path = `${__dirname}/../../.env.local`;
-  if (process.env.NODE_ENV === 'nodemon-local') path = `${__dirname}/../.env.local`;
-  dotenv.config({ path: path });
+const env = process.env.NODE_ENV?.trim();
+
+if (['local', 'nodemon-local'].includes(env ?? '')) {
+  let envPath = path.resolve(__dirname, '../../.env.local');
+
+  if (env === 'nodemon-local') {
+    envPath = path.resolve(__dirname, '../.env.local');
+  }
+
+  dotenv.config({ path: envPath });
+} else {
+  dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 }
 
 import express from 'express';
