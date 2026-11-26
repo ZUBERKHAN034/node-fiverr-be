@@ -16,12 +16,8 @@ const apiDocumentation = {
   },
   servers: [
     {
-      url: 'http://localhost:8002/',
-      description: 'Local Server',
-    },
-    {
-      url: 'https://node-fiverr-be.onrender.com/', // replace it with deployed server url
-      description: 'Production Server',
+      url: process.env.BASE_URL,
+      description: 'Live Server',
     },
   ],
   tags: tags,
